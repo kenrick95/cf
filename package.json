@@ -1,0 +1,14 @@
+{
+  "name": "cf",
+  "version": "0.0.1",
+  "description": "Personal cash flow tracker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Kenrick",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.4.1"
+  }
+}

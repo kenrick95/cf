@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>cf</title>
+    <style>
+html, body, table, tr, td {
+  padding: 0;
+  margin: 0;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.table {
+  width: 100%;
+}
+    </style>
+  </head>
+  <body>
+    <table class="table">
+      <thead class="head">
+        <th>#</th>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Amount</th>
+      </thead>
+      <tbody class="entries">
+        <tr class="entry">
+          <td class="entry-number">1</td>
+          <td class="entry-date">10 December 2016</td>
+          <td class="entry-category">Food &gt; lunch</td>
+          <td class="entry-name">Western</td>
+          <td class="entry-location">Hougang Mall</td>
+          <td class="entry-amount">3.00</td>
+        </tr>
+        <tr class="entry-new">
+          <td class="entry-new-number"><input type="text" class="entry-input-number" /></td>
+          <td class="entry-new-date"><input type="date" class="entry-input-date" /></td>
+          <td class="entry-new-category"><input type="text" class="entry-input-category" /></td>
+          <td class="entry-new-name"><input type="text" class="entry-input-name" /></td>
+          <td class="entry-new-location"><input type="text" class="entry-input-location" /></td>
+          <td class="entry-new-amount"><input type="number" step="0.01" class="entry-input-amount" /></td>
+        </tr>
+      </tbody>
+      <tfoot class="foot">
+        <tr>
+          <td colspan="5">&nbsp;</td>
+          <td class="foot-amount">$300</td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+</html>
