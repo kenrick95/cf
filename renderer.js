@@ -11,7 +11,7 @@ db.changes({
   live: true
 }).on('change', refresh)
 
-let entries = []
+let entriesDOM = document.querySelector('.entries')
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
@@ -35,14 +35,15 @@ class Entry {
     }
   }
   render () {
-    return `<tr class="entry">
-          <td class="entry-number">${this.number}</td>
-          <td class="entry-date">${this.date}</td>
-          <td class="entry-category">${this.category}</td>
-          <td class="entry-name">${this.name}</td>
-          <td class="entry-location">${this.location}</td>
-          <td class="entry-amount">${this.amount}</td>
-        </tr>`
+    let rowDOM = document.createElement('tr')
+    ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
+      let columnDOM = document.createElement('td')
+      columnDOM.textContent = this[name]
+      columnDOM.classList.add(`entry-${name}`)
+      rowDOM.appendChild(columnDOM)
+    })
+    rowDOM.classList.add('entry')
+    return rowDOM
   }
 }
 
@@ -57,18 +58,21 @@ function addEntry () {
   }
 
   let entry = new Entry(data)
-  entries.push(entry)
-  console.log(entry)
   db.putIfNotExists(entry.getProperties())
 }
 
 function refresh () {
   db.allDocs({include_docs: true, descending: true}, (err, doc) => {
-    refreshRow(doc.rows)
+    renderAll(doc.rows)
   })
 }
-function refreshRow () {
-
+function renderAll (entries) {
+  // TODO find better way to append/delete/edit rather than re-render whole thing
+  entriesDOM.innerHTML = ''
+  entries.forEach((data) => {
+    const entry = new Entry(data.doc)
+    entriesDOM.appendChild(entry.render())
+  })
 }
 document.querySelectorAll('.input').forEach((input) => {
   input.addEventListener('keypress', (evt) => {
@@ -77,3 +81,4 @@ document.querySelectorAll('.input').forEach((input) => {
     }
   })
 })
+refresh()
