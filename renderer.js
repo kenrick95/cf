@@ -1,8 +1,7 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-var PouchDB = require('pouchdb')
-PouchDB.plugin(require('pouchdb-upsert'))
+/* global PouchDB */
 
 var ENTER_KEY = 13
 var db = new PouchDB('cf')
@@ -16,6 +15,7 @@ let entries = []
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
+    this._id = (new Date()).toISOString()
     this.number = number
     this.date = date
     this.category = category
@@ -25,6 +25,7 @@ class Entry {
   }
   getProperties () {
     return {
+      _id: this._id,
       number: this.number,
       date: this.date,
       category: this.category,
@@ -69,8 +70,10 @@ function refresh () {
 function refreshRow () {
 
 }
-document.querySelector('.input').addEventListener('keypress', (evt) => {
-  if (evt.keyCode === ENTER_KEY) {
-    addEntry()
-  }
+document.querySelectorAll('.input').forEach((input) => {
+  input.addEventListener('keypress', (evt) => {
+    if (evt.keyCode === ENTER_KEY) {
+      addEntry()
+    }
+  })
 })
