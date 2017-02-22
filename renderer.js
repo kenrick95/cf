@@ -12,6 +12,7 @@ db.changes({
 }).on('change', refresh)
 
 let entriesDOM = document.querySelector('.entries')
+let inputDOMs = document.querySelectorAll('.entry-input')
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
@@ -46,7 +47,11 @@ class Entry {
     return rowDOM
   }
 }
-
+function clearInputs () {
+  inputDOMs.forEach((entry) => {
+    entry.value = ''
+  })
+}
 function addEntry () {
   let data = {
     number: document.querySelector('.entry-input-number').value,
@@ -59,6 +64,7 @@ function addEntry () {
 
   let entry = new Entry(data)
   db.putIfNotExists(entry.getProperties())
+  clearInputs()
 }
 
 function refresh () {
@@ -69,12 +75,13 @@ function refresh () {
 function renderAll (entries) {
   // TODO find better way to append/delete/edit rather than re-render whole thing
   entriesDOM.innerHTML = ''
-  entries.forEach((data) => {
+  let reverseEntries = entries.slice()
+  reverseEntries.reverse().forEach((data) => {
     const entry = new Entry(data.doc)
     entriesDOM.appendChild(entry.render())
   })
 }
-document.querySelectorAll('.input').forEach((input) => {
+inputDOMs.forEach((input) => {
   input.addEventListener('keypress', (evt) => {
     if (evt.keyCode === ENTER_KEY) {
       addEntry()
