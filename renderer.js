@@ -3,8 +3,8 @@
 // All of the Node.js APIs are available in this process.
 /* global PouchDB */
 
-var ENTER_KEY = 13
-var db = new PouchDB('cf')
+const ENTER_KEY = 13
+let db = new PouchDB('cf')
 
 db.changes({
   since: 'now',
@@ -69,6 +69,9 @@ function addEntry () {
 
 function refresh () {
   db.allDocs({include_docs: true, descending: true}, (err, doc) => {
+    if (err) {
+      console.error(err)
+    }
     renderAll(doc.rows)
   })
 }
