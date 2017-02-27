@@ -3,47 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>cf</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-html, body, table, tr, td {
-  padding: 0;
-  margin: 0;
-  font-size: 16px;
-  line-height: 24px;
-}
-input {
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 7px 3px;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 16px;
-  line-height: 24px;
-  color: #111;
-}
-input:hover, input:active, input:focus {
-  border-bottom: 3px solid #ddd;
-  outline: none;
-  transition: border-bottom .2s;
-  color: #111;
-}
-html, body {
-  width: 100%;
-  height: 100%;
-}
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-.table {
-  width: 100%;
-  padding: 1em;
-}
+
 .head {
   font-size: 1.25em;
-}
-.entry-input {
-  width: 95%;
-  height: 1em;
-
 }
 .entry-new-number {
   width: 5em;
@@ -87,12 +52,12 @@ body {
       </tbody>
       <tfoot class="foot">
         <tr class="entry-new">
-          <td class="entry-new-number"><input type="text" class="entry-input entry-input-number" /></td>
-          <td class="entry-new-date"><input type="date" class="entry-input entry-input-date" /></td>
-          <td class="entry-new-category"><input type="text" class="entry-input entry-input-category" /></td>
-          <td class="entry-new-name"><input type="text" class="entry-input entry-input-name" /></td>
-          <td class="entry-new-location"><input type="text" class="entry-input entry-input-location" /></td>
-          <td class="entry-new-amount"><input type="number" step="0.01" class="entry-input entry-input-amount" /></td>
+          <td class="entry-new-number form-group"><input type="text" class="form-control entry-input entry-input-number" /></td>
+          <td class="entry-new-date form-group"><input type="date" class="form-control entry-input entry-input-date" /></td>
+          <td class="entry-new-category form-group"><input type="text" class="form-control entry-input entry-input-category" /></td>
+          <td class="entry-new-name form-group"><input type="text" class="form-control entry-input entry-input-name" /></td>
+          <td class="entry-new-location form-group"><input type="text" class="form-control entry-input entry-input-location" /></td>
+          <td class="entry-new-amount form-group"><input type="number" step="0.01" class="form-control entry-input entry-input-amount" /></td>
         </tr>
         <tr>
           <td colspan="5">&nbsp;</td>
@@ -101,10 +66,12 @@ body {
       </tfoot>
     </table>
   </body>
-
+  <script>
+      window.jQuery = window.$ = require('jquery');
+  </script>
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="./node_modules/pouchdb/dist/pouchdb.js"></script>
   <script src="./node_modules/pouchdb-upsert/dist/pouchdb.upsert.js"></script>
-  <script src="./node_modules/delta-pouch/dist/pouchdb.delta-pouch.js"></script>
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
