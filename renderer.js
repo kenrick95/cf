@@ -1,7 +1,7 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-/* global PouchDB */
+/* global PouchDB, $ */
 
 const ENTER_KEY = 13
 let db = new PouchDB('cf')
@@ -13,6 +13,7 @@ db.changes({
 
 let entriesDOM = document.querySelector('.entries')
 let inputDOMs = document.querySelectorAll('.entry-input')
+const totalDOM = $('.foot-amount')
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
@@ -66,23 +67,36 @@ function addEntry () {
   db.putIfNotExists(entry.getProperties())
   clearInputs()
 }
-
+let entries = []
 function refresh () {
   db.allDocs({include_docs: true, descending: true}, (err, doc) => {
     if (err) {
       console.error(err)
     }
-    renderAll(doc.rows)
+    entries = doc.rows.map((doc) => {
+      return doc.doc
+    })
+    renderAll()
   })
 }
-function renderAll (entries) {
+function renderTotal () {
+  const totalValue = entries.reduce((previousValue, currentValue) => {
+    if (previousValue.amount) {
+      return parseInt(previousValue.amount) + parseInt(currentValue.amount)
+    }
+    return previousValue + parseInt(currentValue.amount)
+  })
+  $(totalDOM).text('$' + totalValue)
+}
+function renderAll () {
   // TODO find better way to append/delete/edit rather than re-render whole thing
   entriesDOM.innerHTML = ''
   let reverseEntries = entries.slice()
   reverseEntries.reverse().forEach((data) => {
-    const entry = new Entry(data.doc)
+    const entry = new Entry(data)
     entriesDOM.appendChild(entry.render())
   })
+  renderTotal()
 }
 inputDOMs.forEach((input) => {
   input.addEventListener('keypress', (evt) => {
