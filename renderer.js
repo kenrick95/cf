@@ -103,6 +103,9 @@ function refresh () {
   })
 }
 function renderTotal () {
+  if (entries.length === 0) {
+    return
+  }
   const totalValue = entries.reduce((previousValue, currentValue) => {
     if (previousValue.amount) {
       return parseInt(previousValue.amount) + parseInt(currentValue.amount)
