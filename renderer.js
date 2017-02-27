@@ -14,6 +14,23 @@ db.changes({
 let entriesDOM = document.querySelector('.entries')
 let inputDOMs = document.querySelectorAll('.entry-input')
 const totalDOM = $('.foot-amount')
+let currentNumber = 0
+
+function pad (string, amount, padChar) {
+  let returnString = String(string)
+  const requiredLength = amount - returnString.length
+  for (var i = 0; i < requiredLength; i++) {
+    returnString = padChar + returnString
+  }
+  return returnString
+}
+function formatDate (date, format) {
+  let dateString = format
+  dateString = dateString.replace('yyyy', date.getFullYear())
+  dateString = dateString.replace('MM', pad(date.getMonth() + 1, 2, '0'))
+  dateString = dateString.replace('dd', pad(date.getDate(), 2, '0'))
+  return dateString
+}
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
@@ -48,10 +65,16 @@ class Entry {
     return rowDOM
   }
 }
+function initDefaultInput () {
+  $('.entry-input-number').val(currentNumber)
+  $('.entry-input-date').val(formatDate(new Date(), 'yyyy-MM-dd'))
+  $('.entry-input-amount').val(0)
+}
 function clearInputs () {
   inputDOMs.forEach((entry) => {
     entry.value = ''
   })
+  initDefaultInput()
 }
 function addEntry () {
   let data = {
@@ -97,6 +120,8 @@ function renderAll () {
     entriesDOM.appendChild(entry.render())
   })
   renderTotal()
+  currentNumber = entries.length + 1
+  clearInputs()
 }
 inputDOMs.forEach((input) => {
   input.addEventListener('keypress', (evt) => {
