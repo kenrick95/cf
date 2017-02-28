@@ -11,8 +11,8 @@ db.changes({
   live: true
 }).on('change', refresh)
 
-let entriesDOM = document.querySelector('.entries')
-let inputDOMs = document.querySelectorAll('.entry-input')
+let entriesDOM = $('.entries')
+let inputDOMs = $('.entry-input')
 const totalDOM = $('.foot-amount')
 let currentNumber = 0
 
@@ -34,9 +34,9 @@ function formatDate (date, format) {
 
 class Entry {
   constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
-    this._id = (new Date()).toISOString()
+    this.date = new Date(date)
+    this._id = formatDate(this.date, 'yyyy-MM-dd') + '-' + number
     this.number = number
-    this.date = date
     this.category = category
     this.name = name
     this.location = location
@@ -46,7 +46,7 @@ class Entry {
     return {
       _id: this._id,
       number: this.number,
-      date: this.date,
+      date: formatDate(this.date, 'yyyy-MM-dd'),
       category: this.category,
       name: this.name,
       location: this.location,
@@ -54,14 +54,14 @@ class Entry {
     }
   }
   render () {
-    let rowDOM = document.createElement('tr')
+    let rowDOM = $('<tr />').addClass('entry')
     ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
-      let columnDOM = document.createElement('td')
-      columnDOM.textContent = this[name]
-      columnDOM.classList.add(`entry-${name}`)
-      rowDOM.appendChild(columnDOM)
+      $('<td />', {
+        text: this.getProperties()[name]
+      })
+        .addClass(`entry-${name}`)
+        .appendTo(rowDOM)
     })
-    rowDOM.classList.add('entry')
     return rowDOM
   }
 }
@@ -71,19 +71,17 @@ function initDefaultInput () {
   $('.entry-input-amount').val(0)
 }
 function clearInputs () {
-  inputDOMs.forEach((entry) => {
-    entry.value = ''
-  })
+  $(inputDOMs).val('')
   initDefaultInput()
 }
 function addEntry () {
   let data = {
-    number: document.querySelector('.entry-input-number').value,
-    date: document.querySelector('.entry-input-date').value,
-    category: document.querySelector('.entry-input-category').value,
-    name: document.querySelector('.entry-input-name').value,
-    location: document.querySelector('.entry-input-location').value,
-    amount: document.querySelector('.entry-input-amount').value
+    number: $('.entry-input-number').val(),
+    date: $('.entry-input-date').val(),
+    category: $('.entry-input-category').val(),
+    name: $('.entry-input-name').val(),
+    location: $('.entry-input-location').val(),
+    amount: $('.entry-input-amount').val()
   }
 
   let entry = new Entry(data)
@@ -103,34 +101,39 @@ function refresh () {
   })
 }
 function renderTotal () {
+  let totalValue = 0
   if (entries.length === 0) {
     return
+  } else if (entries.length === 1) {
+    totalValue = entries[0].amount
+  } else {
+    totalValue = entries.reduce((previousValue, currentValue) => {
+      if (previousValue.amount) {
+        return parseInt(previousValue.amount) + parseInt(currentValue.amount)
+      }
+      return previousValue + parseInt(currentValue.amount)
+    })
   }
-  const totalValue = entries.reduce((previousValue, currentValue) => {
-    if (previousValue.amount) {
-      return parseInt(previousValue.amount) + parseInt(currentValue.amount)
-    }
-    return previousValue + parseInt(currentValue.amount)
-  })
   $(totalDOM).text('$' + totalValue)
 }
 function renderAll () {
   // TODO find better way to append/delete/edit rather than re-render whole thing
-  entriesDOM.innerHTML = ''
+  $(entriesDOM).html('')
   let reverseEntries = entries.slice()
   reverseEntries.reverse().forEach((data) => {
     const entry = new Entry(data)
-    entriesDOM.appendChild(entry.render())
+    $(entriesDOM).append(entry.render())
   })
   renderTotal()
   currentNumber = entries.length + 1
   clearInputs()
 }
-inputDOMs.forEach((input) => {
-  input.addEventListener('keypress', (evt) => {
+$(document).ready(() => {
+  $(inputDOMs).on('keypress', (evt) => {
     if (evt.keyCode === ENTER_KEY) {
       addEntry()
     }
   })
 })
+
 refresh()
