@@ -86,7 +86,6 @@ function addEntry () {
 
   let entry = new Entry(data)
   db.putIfNotExists(entry.getProperties())
-  clearInputs()
 }
 let entries = []
 function refresh () {
@@ -98,6 +97,8 @@ function refresh () {
       return doc.doc
     })
     renderAll()
+    clearInputs()
+    focusInputDate()
   })
 }
 function renderTotal () {
@@ -126,12 +127,16 @@ function renderAll () {
   })
   renderTotal()
   currentNumber = entries.length + 1
-  clearInputs()
+}
+function focusInputDate () {
+  $('.entry-input-date').focus()
 }
 $(document).ready(() => {
   $(inputDOMs).on('keypress', (evt) => {
     if (evt.keyCode === ENTER_KEY) {
       addEntry()
+      clearInputs()
+      focusInputDate()
     }
   })
 })
