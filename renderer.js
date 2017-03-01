@@ -41,10 +41,13 @@ class Entry {
     this.name = name
     this.location = location
     this.amount = amount
+    this._deleted = false
+    this._row = ''
   }
   getProperties () {
     return {
       _id: this._id,
+      _deleted: false,
       number: this.number,
       date: formatDate(this.date, 'yyyy-MM-dd'),
       category: this.category,
@@ -53,15 +56,46 @@ class Entry {
       amount: this.amount
     }
   }
+  undelete () {
+    this._deleted = false
+  }
+  delete () {
+    this._deleted = true
+  }
   render () {
+    this._row = ''
+    if (this._deleted) {
+      return ''
+    }
+
     let rowDOM = $('<tr />').addClass('entry')
     ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
       $('<td />', {
         text: this.getProperties()[name]
-      })
-        .addClass(`entry-${name}`)
+      }).addClass(`entry-${name}`)
         .appendTo(rowDOM)
     })
+    $('<td />', {
+      html: $('<button/>', {
+        html: $('<span/>')
+          .addClass('glyphicon')
+          .addClass('glyphicon-trash')
+      }).addClass('btn')
+        .addClass('btn-danger')
+        .addClass('btn-sm')
+        .click(() => {
+          this.delete(this._id)
+          $(this._row).remove()
+          this._row = ''
+          db.upsert(this._id, (doc) => {
+            doc._deleted = true
+            return doc
+          })
+        })
+    }).addClass('entry-control')
+      .appendTo(rowDOM)
+
+    this._row = rowDOM
     return rowDOM
   }
 }
@@ -93,6 +127,7 @@ function refresh () {
     if (err) {
       console.error(err)
     }
+    console.log(doc)
     entries = doc.rows.map((doc) => {
       return doc.doc
     })
