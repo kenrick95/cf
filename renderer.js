@@ -9,12 +9,14 @@ let db = new PouchDB('cf')
 db.changes({
   since: 'now',
   live: true
-}).on('change', refresh)
+})
 
 let entriesDOM = $('.entries')
 let inputDOMs = $('.entry-input')
 const totalDOM = $('.foot-amount')
 let currentNumber = 0
+let showDeleted = false
+let entries = []
 
 function pad (string, amount, padChar) {
   let returnString = String(string)
@@ -33,7 +35,7 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = ''} = {}) {
+  constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false} = {}) {
     this.date = new Date(date)
     this._id = formatDate(this.date, 'yyyy-MM-dd') + '-' + number
     this.number = number
@@ -41,13 +43,14 @@ class Entry {
     this.name = name
     this.location = location
     this.amount = amount
-    this._deleted = false
+    this.deleted = deleted
     this._row = ''
+    this._rendered = false
   }
   getProperties () {
     return {
       _id: this._id,
-      _deleted: false,
+      deleted: this.deleted,
       number: this.number,
       date: formatDate(this.date, 'yyyy-MM-dd'),
       category: this.category,
@@ -56,17 +59,37 @@ class Entry {
       amount: this.amount
     }
   }
-  undelete () {
-    this._deleted = false
+  toggleDelete () {
+    this.deleted = !this.deleted
+    db.upsert(this._id, (doc) => {
+      doc.deleted = this.deleted
+      return doc
+    })
   }
-  delete () {
-    this._deleted = true
+  renderVisibility () {
+    if (this.deleted && !showDeleted) {
+      $(this._row).hide()
+    } else {
+      $(this._row).show()
+    }
+    if (this.deleted) {
+      $(this._row).find('.label-deleted').show()
+    } else {
+      $(this._row).find('.label-deleted').hide()
+    }
+  }
+  updateRender () {
+    ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
+      $(this._row).find(`.entry-${name}`).text(this.getProperties()[name])
+    })
+    this.renderVisibility()
   }
   render () {
-    this._row = ''
-    if (this._deleted) {
+    if (this._rendered) {
+      this.updateRender()
       return ''
     }
+    this._rendered = true
 
     let rowDOM = $('<tr />').addClass('entry')
     ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
@@ -76,30 +99,37 @@ class Entry {
         .appendTo(rowDOM)
     })
     $('<td />', {
-      html: $('<button/>', {
-        html: $('<span/>')
-          .addClass('glyphicon')
-          .addClass('glyphicon-trash')
-      }).addClass('btn')
-        .addClass('btn-danger')
-        .addClass('btn-sm')
-        .click(() => {
-          this.delete(this._id)
-          $(this._row).remove()
-          this._row = ''
-          db.upsert(this._id, (doc) => {
-            doc._deleted = true
-            return doc
-          })
-        })
+      html: [
+        $('<button/>', {
+          html: $('<span/>')
+            .addClass('glyphicon')
+            .addClass('glyphicon-trash')
+        }).addClass('btn')
+          .addClass('btn-danger')
+          .addClass('btn-sm')
+          .on('click', () => {
+            this.toggleDelete(this._id)
+            this.render()
+          }),
+        ' ',
+        $('<span/>', {
+          text: 'Deleted'
+        }).addClass('label')
+          .addClass('label-danger')
+          .addClass('label-sm')
+          .addClass('label-deleted')
+          .hide()
+      ]
     }).addClass('entry-control')
       .appendTo(rowDOM)
 
     this._row = rowDOM
+    this.renderVisibility()
     return rowDOM
   }
 }
 function initDefaultInput () {
+  currentNumber = entries.length + 1
   $('.entry-input-number').val(currentNumber)
   $('.entry-input-date').val(formatDate(new Date(), 'yyyy-MM-dd'))
   $('.entry-input-amount').val(0)
@@ -120,20 +150,22 @@ function addEntry () {
 
   let entry = new Entry(data)
   db.putIfNotExists(entry.getProperties())
+
+  entries.push(entry)
+  $(entriesDOM).append(entry.render())
 }
-let entries = []
 function refresh () {
-  db.allDocs({include_docs: true, descending: true}, (err, doc) => {
+  db.allDocs({
+    include_docs: true
+  }, (err, doc) => {
     if (err) {
       console.error(err)
     }
     console.log(doc)
     entries = doc.rows.map((doc) => {
-      return doc.doc
+      return new Entry(doc.doc)
     })
-    renderAll()
-    clearInputs()
-    focusInputDate()
+    renderInit()
   })
 }
 function renderTotal () {
@@ -152,16 +184,14 @@ function renderTotal () {
   }
   $(totalDOM).text('$' + totalValue)
 }
-function renderAll () {
-  // TODO find better way to append/delete/edit rather than re-render whole thing
+function renderInit () {
   $(entriesDOM).html('')
-  let reverseEntries = entries.slice()
-  reverseEntries.reverse().forEach((data) => {
-    const entry = new Entry(data)
+  entries.forEach((entry) => {
     $(entriesDOM).append(entry.render())
   })
   renderTotal()
-  currentNumber = entries.length + 1
+  clearInputs()
+  focusInputDate()
 }
 function focusInputDate () {
   $('.entry-input-date').focus()
@@ -173,6 +203,14 @@ $(document).ready(() => {
       clearInputs()
       focusInputDate()
     }
+  })
+  $('.show-deleted').click((e) => {
+    $(e.target).toggleClass('active')
+    showDeleted = !showDeleted
+    console.log('showDeleted', showDeleted)
+    entries.forEach((entry) => {
+      entry.render()
+    })
   })
 })
 
