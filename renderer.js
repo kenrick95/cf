@@ -10,6 +10,7 @@ db.changes({
   since: 'now',
   live: true
 })
+var remoteCouch = ' http://localhost:5984/cf'
 
 let entriesDOM = $('.entries')
 let inputDOMs = $('.entry-input')
@@ -213,5 +214,17 @@ $(document).ready(() => {
     })
   })
 })
+function sync () {
+  // syncDom.setAttribute('data-sync-state', 'syncing')
+  var opts = {live: true}
+  db.replicate.to(remoteCouch, opts, syncError)
+  db.replicate.from(remoteCouch, opts, syncError)
+}
+function syncError () {
+  // syncDom.setAttribute('data-sync-state', 'error');
+}
 
 refresh()
+if (remoteCouch) {
+  sync()
+}
