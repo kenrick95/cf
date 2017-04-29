@@ -15,6 +15,33 @@ const totalDOM = $('.foot-amount')
 let currentNumber = 0
 let showDeleted = false
 let entries = []
+const filters = {
+  months: {
+    data: ['All'],
+    active: 0,
+    construct: (item) => {
+      if (!filters.months.data) {
+        filters.months.data = []
+      }
+      const date = formatDate(item.date, 'yyyy-MM')
+      if (filters.months.data.indexOf(date) === -1) {
+        filters.months.data.push(date)
+      }
+    },
+    apply: (item) => {
+      if (filters.months.active === 0) {
+        return true
+      }
+      return formatDate(item.date, 'yyyy-MM') === filters.months.data[filters.months.active]
+    }
+  }
+}
+
+function constructFilters (item) {
+  Object.values(filters).forEach(filter => {
+    filter.construct(item)
+  })
+}
 
 function pad (string, amount, padChar) {
   let returnString = String(string)
@@ -33,7 +60,7 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor ({number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false} = {}) {
+  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false } = {}) {
     this.date = new Date(date)
     this._id = formatDate(this.date, 'yyyy-MM-dd') + '-' + number
     this.number = number
@@ -44,6 +71,8 @@ class Entry {
     this.deleted = deleted
     this._row = ''
     this._rendered = false
+
+    constructFilters(this)
   }
   getProperties () {
     return {
@@ -64,11 +93,14 @@ class Entry {
       return doc
     })
   }
+  isVisible () {
+    return filters.months.apply(this) && !(this.deleted && !showDeleted)
+  }
   renderVisibility () {
-    if (this.deleted && !showDeleted) {
-      $(this._row).hide()
-    } else {
+    if (this.isVisible()) {
       $(this._row).show()
+    } else {
+      $(this._row).hide()
     }
     if (this.deleted) {
       $(this._row).find('.label-deleted').show()
@@ -90,12 +122,12 @@ class Entry {
     this._rendered = true
 
     let rowDOM = $('<tr />').addClass('entry')
-    ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
-      $('<td />', {
-        text: this.getProperties()[name]
-      }).addClass(`entry-${name}`)
-        .appendTo(rowDOM)
-    })
+      ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
+        $('<td />', {
+          text: this.getProperties()[name]
+        }).addClass(`entry-${name}`)
+          .appendTo(rowDOM)
+      })
     $('<td />', {
       html: [
         $('<button/>', {
@@ -169,24 +201,28 @@ function refresh () {
 }
 function renderTotal () {
   let totalValue = 0
-  if (entries.length === 0) {
-    return
-  } else if (entries.length === 1) {
-    totalValue = entries[0].amount
-  } else {
-    totalValue = entries.reduce((previousValue, currentValue) => {
-      if (previousValue.amount) {
-        return parseInt(previousValue.amount) + parseInt(currentValue.amount)
-      }
-      return previousValue + parseInt(currentValue.amount)
-    })
-  }
-  $(totalDOM).text('$' + totalValue)
+  entries.forEach(entry => {
+    if (entry.amount && entry.isVisible()) {
+      totalValue += parseFloat(entry.amount)
+    }
+  })
+  $(totalDOM).text('$' + totalValue.toFixed(2))
 }
 function renderInit () {
   $(entriesDOM).html('')
   entries.forEach((entry) => {
     $(entriesDOM).append(entry.render())
+  })
+  $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
+    html: month,
+    value: index
+  })))
+  $('.filter-month').on('input', (e) => {
+    filters.months.active = parseInt($(e.target).val())
+    entries.forEach((entry) => {
+      entry.render()
+    })
+    renderTotal()
   })
   renderTotal()
   clearInputs()
@@ -206,7 +242,6 @@ $(document).ready(() => {
   $('.show-deleted').click((e) => {
     $(e.target).toggleClass('active')
     showDeleted = !showDeleted
-    console.log('showDeleted', showDeleted)
     entries.forEach((entry) => {
       entry.render()
     })
@@ -214,7 +249,7 @@ $(document).ready(() => {
 })
 function sync () {
   // syncDom.setAttribute('data-sync-state', 'syncing')
-  var opts = {live: true}
+  var opts = { live: true }
   db.replicate.to(remoteCouch, opts, syncError)
   db.replicate.from(remoteCouch, opts, syncError)
 }

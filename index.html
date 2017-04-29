@@ -6,7 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
+.header {
+  position: sticky;
+  top: 0;
+  height: 50px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0));
+  display: flex;
+}
+.filter {
+  flex: 0 1 auto;
+}
+.filter-spacer {
+  flex: 1 1 auto;
+}
 .head {
   font-size: 1.25em;
 }
@@ -34,6 +46,14 @@
     </style>
   </head>
   <body>
+    <header class="header">
+      <div class="form-group fiter">
+        <select class="form-control filter-month">
+          <option>December 2016</option>
+        </select>
+      </div>
+      <div class="filter-spacer"></div>
+    </header>
     <table class="table">
       <thead class="head">
         <th>#</th>
