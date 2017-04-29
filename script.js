@@ -1,6 +1,3 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
 /* global PouchDB, $ */
 
 const ENTER_KEY = 13
@@ -154,6 +151,7 @@ function addEntry () {
 
   entries.push(entry)
   $(entriesDOM).append(entry.render())
+  renderTotal()
 }
 function refresh () {
   db.allDocs({

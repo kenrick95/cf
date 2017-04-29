@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>cf</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 
 .head {
@@ -87,15 +87,10 @@
       </tfoot>
     </table>
   </body>
-  <script>
-      window.jQuery = window.$ = require('jquery');
-  </script>
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="./node_modules/pouchdb/dist/pouchdb.js"></script>
-  <script src="./node_modules/pouchdb-upsert/dist/pouchdb.upsert.js"></script>
-  <!--<script src="./node_modules/xlsx/dist/xlsx.core.min.js"></script>-->
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-  </script>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/pouchdb/dist/pouchdb.js"></script>
+  <script src="node_modules/pouchdb-upsert/dist/pouchdb.upsert.js"></script>
+  <!--<script src="node_modules/xlsx/dist/xlsx.core.min.js"></script>-->
+  <script src="script.js"></script>
 </html>
