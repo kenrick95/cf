@@ -7,7 +7,7 @@ db.changes({
   since: 'now',
   live: true
 })
-var remoteCouch = ' http://localhost:5984/cf'
+var remoteCouch = 'https://pine.lan:6984/cf'
 
 let entriesDOM = $('.entries')
 let inputDOMs = $('.entry-input')
