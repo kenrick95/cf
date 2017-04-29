@@ -28,13 +28,22 @@ const filters = {
       }
       return formatDate(item.date, 'yyyy-MM') === filters.months.data[filters.months.active]
     }
+  },
+  showDeleted: {
+    active: false,
+    construct: () => {},
+    apply: (item) => {
+      return !item.deleted || filters.showDeleted.active
+    }
   }
 }
 
+function applyFilters (item) {
+  return Object.values(filters).map(filter => filter.apply(item))
+}
+
 function constructFilters (item) {
-  Object.values(filters).forEach(filter => {
-    filter.construct(item)
-  })
+  Object.values(filters).forEach(filter => filter.construct(item))
 }
 
 /** utils */
@@ -55,7 +64,7 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null, _showDeleted = false } = {}) {
+  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null } = {}) {
     this.date = new Date(date)
     if (customId) {
       this._id = customId
@@ -70,7 +79,6 @@ class Entry {
     this.deleted = deleted
     this._row = ''
     this._rendered = false
-    this._showDeleted = _showDeleted
 
     constructFilters(this)
   }
@@ -94,7 +102,7 @@ class Entry {
     })
   }
   isVisible () {
-    return filters.months.apply(this) && !(this.deleted && !this._showDeleted)
+    return applyFilters(this).reduce((a, b) => a && b)
   }
   renderVisibility () {
     if (this.isVisible()) {
@@ -160,15 +168,9 @@ class Entry {
 }
 
 class Entries {
-  constructor() {
+  constructor () {
     this.entries = []
     this._dom = $('.entries')
-  }
-  updateShowDeleted (newShowDeleted) {
-    this.entries.forEach(entry => {
-      entry._showDeleted = newShowDeleted
-      entry.updateRender()
-    })
   }
   render () {
     this._dom.html(this.entries.map((entry) => {
@@ -177,7 +179,7 @@ class Entries {
   }
 }
 class MainInput {
-  constructor({ number = 0 } = {}) {
+  constructor ({ number = 0 } = {}) {
     this._dom = $('.entry-new')
     this.number = number
   }
@@ -215,7 +217,7 @@ class MainInput {
   }
 }
 class TotalAmount {
-  constructor({ totalAmount = 0 } = {}) {
+  constructor ({ totalAmount = 0 } = {}) {
     this._dom = $('.foot-amount')
   }
   render () {
@@ -223,7 +225,7 @@ class TotalAmount {
   }
 }
 class App {
-  constructor() {
+  constructor () {
     this.entries = new Entries()
     this.mainInput = new MainInput()
     this.totalAmount = new TotalAmount()
@@ -237,7 +239,7 @@ class App {
     $('.show-deleted').click((e) => {
       $(e.target).toggleClass('active')
       this.showDeleted = !this.showDeleted
-      this.entries.updateShowDeleted(this.showDeleted)
+      filters.showDeleted.active = this.showDeleted
     })
     $(this.mainInput._dom).on('keypress', (evt) => {
       if (evt.keyCode === ENTER_KEY) {
@@ -321,7 +323,6 @@ class App {
     })
   }
 }
-
 
 $(document).ready(() => {
   const app = new App()
