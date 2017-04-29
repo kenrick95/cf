@@ -236,10 +236,13 @@ class App {
       this.sync()
     }
 
-    $('.show-deleted').click((e) => {
+    $('.filter-show-deleted').click((e) => {
       $(e.target).toggleClass('active')
       this.showDeleted = !this.showDeleted
       filters.showDeleted.active = this.showDeleted
+      this.entries.entries.forEach((entry) => {
+        entry.updateRender()
+      })
     })
     $(this.mainInput._dom).on('keypress', (evt) => {
       if (evt.keyCode === ENTER_KEY) {
