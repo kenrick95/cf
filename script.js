@@ -252,10 +252,6 @@ class App {
         this.mainInput.focusInputDate()
       }
     })
-    $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
-      html: month,
-      value: index
-    })))
     $('.filter-month').on('input', (e) => {
       filters.months.active = parseInt($(e.target).val())
       this.entries.entries.forEach((entry) => {
@@ -289,6 +285,11 @@ class App {
     this.totalAmount.render()
     this.mainInput.clear()
     this.mainInput.focusInputDate()
+
+    $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
+      html: month,
+      value: index
+    })))
   }
   addEntry () {
     let data = {
