@@ -1,20 +1,14 @@
 /* global PouchDB, $ */
 
 const ENTER_KEY = 13
-let db = new PouchDB('cf')
-
+const db = new PouchDB('cf')
 db.changes({
   since: 'now',
   live: true
 })
-var remoteCouch = 'https://pine.lan:6984/cf'
+const remoteCouch = 'https://pine.lan:6984/cf'
 
-let entriesDOM = $('.entries')
-let inputDOMs = $('.entry-input')
-const totalDOM = $('.foot-amount')
-let currentNumber = 0
-let showDeleted = false
-let entries = []
+/** Filters */
 const filters = {
   months: {
     data: ['All'],
@@ -43,6 +37,7 @@ function constructFilters (item) {
   })
 }
 
+/** utils */
 function pad (string, amount, padChar) {
   let returnString = String(string)
   const requiredLength = amount - returnString.length
@@ -60,7 +55,7 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null } = {}) {
+  constructor({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null, _showDeleted = false } = {}) {
     this.date = new Date(date)
     if (customId) {
       this._id = customId
@@ -75,6 +70,7 @@ class Entry {
     this.deleted = deleted
     this._row = ''
     this._rendered = false
+    this._showDeleted = _showDeleted
 
     constructFilters(this)
   }
@@ -98,7 +94,7 @@ class Entry {
     })
   }
   isVisible () {
-    return filters.months.apply(this) && !(this.deleted && !showDeleted)
+    return filters.months.apply(this) && !(this.deleted && !this._showDeleted)
   }
   renderVisibility () {
     if (this.isVisible()) {
@@ -162,108 +158,171 @@ class Entry {
     return rowDOM
   }
 }
-function initDefaultInput () {
-  currentNumber = entries.length + 1
-  $('.entry-input-number').val(currentNumber)
-  $('.entry-input-date').val(formatDate(new Date(), 'yyyy-MM-dd'))
-  $('.entry-input-amount').val(0)
-}
-function clearInputs () {
-  $(inputDOMs).val('')
-  initDefaultInput()
-}
-function addEntry () {
-  let data = {
-    number: $('.entry-input-number').val(),
-    date: $('.entry-input-date').val(),
-    category: $('.entry-input-category').val(),
-    name: $('.entry-input-name').val(),
-    location: $('.entry-input-location').val(),
-    amount: $('.entry-input-amount').val()
+
+class Entries {
+  constructor() {
+    this.entries = []
+    this._dom = $('.entries')
   }
-
-  let entry = new Entry(data)
-  db.putIfNotExists(entry.getProperties())
-
-  entries.push(entry)
-  $(entriesDOM).append(entry.render())
-  renderTotal()
-}
-function refresh () {
-  db.allDocs({
-    include_docs: true
-  }, (err, doc) => {
-    if (err) {
-      console.error(err)
-    }
-    console.log(doc)
-    entries = doc.rows.map((doc) => {
-      const data = doc.doc
-      data.customId = doc.id
-      return new Entry(data)
+  updateShowDeleted (newShowDeleted) {
+    this.entries.forEach(entry => {
+      entry._showDeleted = newShowDeleted
+      entry.updateRender()
     })
-    renderInit()
-  })
+  }
+  render () {
+    this._dom.html(this.entries.map((entry) => {
+      return entry.render()
+    }))
+  }
 }
-function renderTotal () {
-  let totalValue = 0
-  entries.forEach(entry => {
-    if (entry.amount && entry.isVisible()) {
-      totalValue += parseFloat(entry.amount)
+class MainInput {
+  constructor({ number = 0 } = {}) {
+    this._dom = $('.entry-new')
+    this.number = number
+  }
+  focusInputDate () {
+    $('.entry-input-date').focus()
+  }
+  clear () {
+    $(this._dom).find('.entry-input').val('')
+    $('.entry-input-number').val(this.number)
+    $('.entry-input-date').val(formatDate(new Date(), 'yyyy-MM-dd'))
+    $('.entry-input-amount').val(0)
+  }
+  render () {
+    this._dom.html(`<td class="entry-new-number form-group">
+      <input type="text" class="form-control entry-input entry-input-number" disabled value="${this.number}"/>
+    </td>
+    <td class="entry-new-date form-group">
+      <input type="date" class="form-control entry-input entry-input-date" required value="${formatDate(new Date(), 'yyyy-MM-dd')}"/>
+    </td>
+    <td class="entry-new-category form-group">
+      <input type="text" class="form-control entry-input entry-input-category" />
+    </td>
+    <td class="entry-new-name form-group">
+      <input type="text" class="form-control entry-input entry-input-name" required />
+    </td>
+    <td class="entry-new-location form-group">
+      <input type="text" class="form-control entry-input entry-input-location" />
+    </td>
+    <td class="entry-new-amount form-group">
+      <input type="number" step="0.01" class="form-control entry-input entry-input-amount" required value="0"/>
+    </td>
+    <td class="entry-new-control">
+      &nbsp;
+    </td>`)
+  }
+}
+class TotalAmount {
+  constructor({ totalAmount = 0 } = {}) {
+    this._dom = $('.foot-amount')
+  }
+  render () {
+    $(this._dom).text('$' + this.totalAmount.toFixed(2))
+  }
+}
+class App {
+  constructor() {
+    this.entries = new Entries()
+    this.mainInput = new MainInput()
+    this.totalAmount = new TotalAmount()
+    this.showDeleted = false
+
+    this.refresh()
+    if (remoteCouch) {
+      this.sync()
     }
-  })
-  $(totalDOM).text('$' + totalValue.toFixed(2))
-}
-function renderInit () {
-  $(entriesDOM).html('')
-  entries.forEach((entry) => {
-    $(entriesDOM).append(entry.render())
-  })
-  $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
-    html: month,
-    value: index
-  })))
-  $('.filter-month').on('input', (e) => {
-    filters.months.active = parseInt($(e.target).val())
-    entries.forEach((entry) => {
-      entry.render()
+
+    $('.show-deleted').click((e) => {
+      $(e.target).toggleClass('active')
+      this.showDeleted = !this.showDeleted
+      this.entries.updateShowDeleted(this.showDeleted)
     })
-    renderTotal()
-  })
-  renderTotal()
-  clearInputs()
-  focusInputDate()
+    $(this.mainInput._dom).on('keypress', (evt) => {
+      if (evt.keyCode === ENTER_KEY) {
+        this.addEntry()
+        this.mainInput.number = this.entries.entries.length + 1
+        this.mainInput.clear()
+        this.mainInput.focusInputDate()
+      }
+    })
+    $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
+      html: month,
+      value: index
+    })))
+    $('.filter-month').on('input', (e) => {
+      filters.months.active = parseInt($(e.target).val())
+      this.entries.entries.forEach((entry) => {
+        entry.updateRender()
+      })
+      this.updateTotalAmount()
+      this.totalAmount.render()
+    })
+  }
+  sync () {
+    var opts = { live: true }
+    db.replicate.to(remoteCouch, opts)
+    db.replicate.from(remoteCouch, opts)
+  }
+  updateTotalAmount () {
+    let totalValue = 0
+    this.entries.entries.forEach(entry => {
+      if (entry.amount && entry.isVisible()) {
+        totalValue += parseFloat(entry.amount)
+      }
+    })
+    this.totalAmount.totalAmount = totalValue
+  }
+  render () {
+    this.entries.render()
+
+    this.mainInput.number = this.entries.entries.length + 1
+    this.mainInput.render()
+
+    this.updateTotalAmount()
+    this.totalAmount.render()
+    this.mainInput.clear()
+    this.mainInput.focusInputDate()
+  }
+  addEntry () {
+    let data = {
+      number: $('.entry-input-number').val(),
+      date: $('.entry-input-date').val(),
+      category: $('.entry-input-category').val(),
+      name: $('.entry-input-name').val(),
+      location: $('.entry-input-location').val(),
+      amount: $('.entry-input-amount').val()
+    }
+
+    let entry = new Entry(data)
+    db.putIfNotExists(entry.getProperties())
+
+    this.entries.entries.push(entry)
+    this.entries._dom.append(entry.render())
+
+    this.updateTotalAmount()
+    this.totalAmount.render()
+  }
+  refresh () {
+    db.allDocs({
+      include_docs: true
+    }, (err, doc) => {
+      if (err) {
+        console.error(err)
+      }
+      console.log(doc)
+      this.entries.entries = doc.rows.map((doc) => {
+        const data = doc.doc
+        data.customId = doc.id
+        return new Entry(data)
+      })
+      this.render()
+    })
+  }
 }
-function focusInputDate () {
-  $('.entry-input-date').focus()
-}
+
+
 $(document).ready(() => {
-  $(inputDOMs).on('keypress', (evt) => {
-    if (evt.keyCode === ENTER_KEY) {
-      addEntry()
-      clearInputs()
-      focusInputDate()
-    }
-  })
-  $('.show-deleted').click((e) => {
-    $(e.target).toggleClass('active')
-    showDeleted = !showDeleted
-    entries.forEach((entry) => {
-      entry.render()
-    })
-  })
+  const app = new App()
 })
-function sync () {
-  // syncDom.setAttribute('data-sync-state', 'syncing')
-  var opts = { live: true }
-  db.replicate.to(remoteCouch, opts, syncError)
-  db.replicate.from(remoteCouch, opts, syncError)
-}
-function syncError () {
-  // syncDom.setAttribute('data-sync-state', 'error');
-}
-
-refresh()
-if (remoteCouch) {
-  sync()
-}
