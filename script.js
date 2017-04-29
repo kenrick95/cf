@@ -60,9 +60,13 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false } = {}) {
+  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null } = {}) {
     this.date = new Date(date)
-    this._id = formatDate(this.date, 'yyyy-MM-dd') + '-' + number
+    if (customId) {
+      this._id = customId
+    } else {
+      this._id = formatDate(this.date, 'yyyy-MM-dd') + '-' + number
+    }
     this.number = number
     this.category = category
     this.name = name
@@ -194,7 +198,9 @@ function refresh () {
     }
     console.log(doc)
     entries = doc.rows.map((doc) => {
-      return new Entry(doc.doc)
+      const data = doc.doc
+      data.customId = doc.id
+      return new Entry(data)
     })
     renderInit()
   })
