@@ -13,7 +13,7 @@ const filters = {
   months: {
     data: ['All'],
     active: 0,
-    construct: (item) => {
+    construct: item => {
       if (!filters.months.data) {
         filters.months.data = []
       }
@@ -22,17 +22,20 @@ const filters = {
         filters.months.data.push(date)
       }
     },
-    apply: (item) => {
+    apply: item => {
       if (filters.months.active === 0) {
         return true
       }
-      return formatDate(item.date, 'yyyy-MM') === filters.months.data[filters.months.active]
+      return (
+        formatDate(item.date, 'yyyy-MM') ===
+        filters.months.data[filters.months.active]
+      )
     }
   },
   showDeleted: {
     active: false,
     construct: () => {},
-    apply: (item) => {
+    apply: item => {
       return !item.deleted || filters.showDeleted.active
     }
   }
@@ -64,7 +67,18 @@ function formatDate (date, format) {
 }
 
 class Entry {
-  constructor ({ number = 0, date = new Date(), category = '', name = '', location = '', amount = '', deleted = false, customId = null } = {}) {
+  constructor (
+    {
+      number = 0,
+      date = new Date(),
+      category = '',
+      name = '',
+      location = '',
+      amount = '',
+      deleted = false,
+      customId = null
+    } = {}
+  ) {
     this.date = new Date(date)
     if (customId) {
       this._id = customId
@@ -96,7 +110,7 @@ class Entry {
   }
   toggleDelete () {
     this.deleted = !this.deleted
-    db.upsert(this._id, (doc) => {
+    db.upsert(this._id, doc => {
       doc.deleted = this.deleted
       return doc
     })
@@ -117,7 +131,14 @@ class Entry {
     }
   }
   updateRender () {
-    ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
+    ;[
+      'number',
+      'date',
+      'category',
+      'name',
+      'location',
+      'amount'
+    ].forEach(name => {
       $(this._row).find(`.entry-${name}`).text(this.getProperties()[name])
     })
     this.renderVisibility()
@@ -130,19 +151,26 @@ class Entry {
     this._rendered = true
 
     let rowDOM = $('<tr />').addClass('entry')
-      ;['number', 'date', 'category', 'name', 'location', 'amount'].forEach((name) => {
-        $('<td />', {
-          text: this.getProperties()[name]
-        }).addClass(`entry-${name}`)
-          .appendTo(rowDOM)
+    ;[
+      'number',
+      'date',
+      'category',
+      'name',
+      'location',
+      'amount'
+    ].forEach(name => {
+      $('<td />', {
+        text: this.getProperties()[name]
       })
+        .addClass(`entry-${name}`)
+        .appendTo(rowDOM)
+    })
     $('<td />', {
       html: [
         $('<button/>', {
-          html: $('<span/>')
-            .addClass('glyphicon')
-            .addClass('glyphicon-trash')
-        }).addClass('btn')
+          html: $('<span/>').addClass('glyphicon').addClass('glyphicon-trash')
+        })
+          .addClass('btn')
           .addClass('btn-danger')
           .addClass('btn-sm')
           .on('click', () => {
@@ -152,13 +180,15 @@ class Entry {
         ' ',
         $('<span/>', {
           text: 'Deleted'
-        }).addClass('label')
+        })
+          .addClass('label')
           .addClass('label-danger')
           .addClass('label-sm')
           .addClass('label-deleted')
           .hide()
       ]
-    }).addClass('entry-control')
+    })
+      .addClass('entry-control')
       .appendTo(rowDOM)
 
     this._row = rowDOM
@@ -173,9 +203,11 @@ class Entries {
     this._dom = $('.entries')
   }
   render () {
-    this._dom.html(this.entries.map((entry) => {
-      return entry.render()
-    }))
+    this._dom.html(
+      this.entries.map(entry => {
+        return entry.render()
+      })
+    )
   }
 }
 class MainInput {
@@ -193,7 +225,8 @@ class MainInput {
     $('.entry-input-amount').val(0)
   }
   render () {
-    this._dom.html(`<td class="entry-new-number form-group">
+    this._dom.html(
+      `<td class="entry-new-number form-group">
       <input type="text" class="form-control entry-input entry-input-number" disabled value="${this.number}"/>
     </td>
     <td class="entry-new-date form-group">
@@ -213,7 +246,8 @@ class MainInput {
     </td>
     <td class="entry-new-control">
       &nbsp;
-    </td>`)
+    </td>`
+    )
   }
 }
 class TotalAmount {
@@ -236,15 +270,15 @@ class App {
       this.sync()
     }
 
-    $('.filter-show-deleted').click((e) => {
+    $('.filter-show-deleted').click(e => {
       $(e.target).toggleClass('active')
       this.showDeleted = !this.showDeleted
       filters.showDeleted.active = this.showDeleted
-      this.entries.entries.forEach((entry) => {
+      this.entries.entries.forEach(entry => {
         entry.updateRender()
       })
     })
-    $(this.mainInput._dom).on('keypress', (evt) => {
+    $(this.mainInput._dom).on('keypress', evt => {
       if (evt.keyCode === ENTER_KEY) {
         this.addEntry()
         this.mainInput.number = this.entries.entries.length + 1
@@ -252,9 +286,9 @@ class App {
         this.mainInput.focusInputDate()
       }
     })
-    $('.filter-month').on('input', (e) => {
+    $('.filter-month').on('input', e => {
       filters.months.active = parseInt($(e.target).val())
-      this.entries.entries.forEach((entry) => {
+      this.entries.entries.forEach(entry => {
         entry.updateRender()
       })
       this.updateTotalAmount()
@@ -286,10 +320,14 @@ class App {
     this.mainInput.clear()
     this.mainInput.focusInputDate()
 
-    $('.filter-month').html(filters.months.data.map((month, index) => $('<option />', {
-      html: month,
-      value: index
-    })))
+    $('.filter-month').html(
+      filters.months.data.map((month, index) =>
+        $('<option />', {
+          html: month,
+          value: index
+        })
+      )
+    )
   }
   addEntry () {
     let data = {
@@ -311,20 +349,23 @@ class App {
     this.totalAmount.render()
   }
   refresh () {
-    db.allDocs({
-      include_docs: true
-    }, (err, doc) => {
-      if (err) {
-        console.error(err)
+    db.allDocs(
+      {
+        include_docs: true
+      },
+      (err, doc) => {
+        if (err) {
+          console.error(err)
+        }
+        console.log(doc)
+        this.entries.entries = doc.rows.map(doc => {
+          const data = doc.doc
+          data.customId = doc.id
+          return new Entry(data)
+        })
+        this.render()
       }
-      console.log(doc)
-      this.entries.entries = doc.rows.map((doc) => {
-        const data = doc.doc
-        data.customId = doc.id
-        return new Entry(data)
-      })
-      this.render()
-    })
+    )
   }
 }
 
