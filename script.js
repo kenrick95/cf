@@ -6,7 +6,7 @@ db.changes({
   since: 'now',
   live: true
 })
-const remoteCouch = 'https://pine.lan:6984/cf'
+const remoteCouch = 'http://localhost:5984/cf'
 
 /** Filters */
 const filters = {
