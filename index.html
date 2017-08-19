@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <title>cf</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
+.header {
+  position: sticky;
+  top: 0;
+  height: 50px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0));
+  display: flex;
+  z-index: 2;
+  padding: 5px;
+}
+.filter {
+  flex: 0 1 auto;
+}
+.filter-spacer {
+  flex: 1 1 auto;
+}
 .head {
   font-size: 1.25em;
 }
@@ -34,6 +48,17 @@
     </style>
   </head>
   <body>
+    <header class="header">
+      <div class="form-group fiter">
+        <select class="form-control filter-month">
+          <option>2016-10</option>
+        </select>
+      </div>
+      <div class="filter-spacer"></div>
+      <div class="filter">
+        <button class="btn btn-sm btn-primary filter-show-deleted">Show deleted</button>
+      </div>
+    </header>
     <table class="table">
       <thead class="head">
         <th>#</th>
@@ -42,7 +67,7 @@
         <th>Name</th>
         <th>Location</th>
         <th>Amount</th>
-        <th><button class="btn btn-sm btn-primary show-deleted">Show deleted</button></th>
+        <th>&nbsp;</th>
       </thead>
       <tbody class="entries">
         <tr class="entry">
@@ -57,27 +82,6 @@
       </tbody>
       <tfoot class="foot">
         <tr class="entry-new">
-          <td class="entry-new-number form-group">
-            <input type="text" class="form-control entry-input entry-input-number" disabled />
-          </td>
-          <td class="entry-new-date form-group">
-            <input type="date" class="form-control entry-input entry-input-date" required />
-          </td>
-          <td class="entry-new-category form-group">
-            <input type="text" class="form-control entry-input entry-input-category" />
-          </td>
-          <td class="entry-new-name form-group">
-            <input type="text" class="form-control entry-input entry-input-name" required />
-          </td>
-          <td class="entry-new-location form-group">
-            <input type="text" class="form-control entry-input entry-input-location" />
-          </td>
-          <td class="entry-new-amount form-group">
-            <input type="number" step="0.01" class="form-control entry-input entry-input-amount" required />
-          </td>
-          <td class="entry-new-control">
-            &nbsp;
-          </td>
         </tr>
         <tr>
           <td colspan="5">&nbsp;</td>
@@ -87,15 +91,10 @@
       </tfoot>
     </table>
   </body>
-  <script>
-      window.jQuery = window.$ = require('jquery');
-  </script>
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="./node_modules/pouchdb/dist/pouchdb.js"></script>
-  <script src="./node_modules/pouchdb-upsert/dist/pouchdb.upsert.js"></script>
-  <!--<script src="./node_modules/xlsx/dist/xlsx.core.min.js"></script>-->
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-  </script>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="node_modules/pouchdb/dist/pouchdb.js"></script>
+  <script src="node_modules/pouchdb-upsert/dist/pouchdb.upsert.js"></script>
+  <!--<script src="node_modules/xlsx/dist/xlsx.core.min.js"></script>-->
+  <script src="script.js"></script>
 </html>
