@@ -9,7 +9,7 @@ class TableFooter extends React.Component {
     return (
       <tfoot className="table-header">
         <tr>
-          <td colspan="5">&nbsp;</td>
+          <td colSpan="5">&nbsp;</td>
           <td>{total}</td>
           <td>&nbsp;</td>
         </tr>
