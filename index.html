@@ -1,100 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>cf</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-.header {
-  position: sticky;
-  top: 0;
-  height: 50px;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0));
-  display: flex;
-  z-index: 2;
-  padding: 5px;
-}
-.filter {
-  flex: 0 1 auto;
-}
-.filter-spacer {
-  flex: 1 1 auto;
-}
-.head {
-  font-size: 1.25em;
-}
-.entry-new-number {
-  width: 5em;
-}
-.entry-new-date {
-  width: 10em;
-}
-.entry-new-category {
-  width: 10em;
-}
-.entry-new-name {
-  width: 10em;
-}
-.entry-new-location {
-  width: 10em;
-}
-.entry-new-amount {
-  width: 5em;
-}
-.entry-new-control {
-  width: 3em;
-}
-    </style>
-  </head>
-  <body>
-    <header class="header">
-      <div class="form-group fiter">
-        <select class="form-control filter-month">
-          <option>2016-10</option>
-        </select>
-      </div>
-      <div class="filter-spacer"></div>
-      <div class="filter">
-        <button class="btn btn-sm btn-primary filter-show-deleted">Show deleted</button>
-      </div>
-    </header>
-    <table class="table">
-      <thead class="head">
-        <th>#</th>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Amount</th>
-        <th>&nbsp;</th>
-      </thead>
-      <tbody class="entries">
-        <tr class="entry">
-          <td class="entry-number">1</td>
-          <td class="entry-date">10 December 2016</td>
-          <td class="entry-category">Food &gt; lunch</td>
-          <td class="entry-name">Western</td>
-          <td class="entry-location">Hougang Mall</td>
-          <td class="entry-amount">3.00</td>
-          <td class="entry-control"><button class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-delete"></span></button></td>
-        </tr>
-      </tbody>
-      <tfoot class="foot">
-        <tr class="entry-new">
-        </tr>
-        <tr>
-          <td colspan="5">&nbsp;</td>
-          <td class="foot-amount">$300</td>
-          <td>&nbsp;</td>
-        </tr>
-      </tfoot>
-    </table>
-  </body>
-  <script src="https://cdn.jsdelivr.net/jquery/2.2.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/pouchdb/6.2.0/pouchdb.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/pouchdb/upsert@2.2.0/dist/pouchdb.upsert.min.js"></script>
-  <!--<script src="node_modules/xlsx/dist/xlsx.core.min.js"></script>-->
-  <script src="script.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="./src/index.js"></script>
+</body>
+
 </html>
