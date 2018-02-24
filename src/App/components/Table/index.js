@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import TableHeader from './components/TableHeader';
 import TableEntry from './components/TableEntry';
 import TableInput from './components/TableInput';
@@ -9,11 +10,14 @@ class Table extends React.Component {
     super();
   }
   render() {
+    const { entries } = this.props;
     return (
       <table className="table">
         <TableHeader />
         <tbody>
-          <TableEntry />
+          {entries.map(entry => {
+            return <TableEntry key={entry._id} {...entry} />;
+          })}
           <TableInput />
         </tbody>
         <TableFooter />
@@ -22,4 +26,14 @@ class Table extends React.Component {
   }
 }
 
-export default Table;
+export default connect(state => {
+  return {
+    entries:
+      state &&
+      state.entries &&
+      state.entries.items &&
+      state.entries.items.length > 0
+        ? state.entries.items
+        : []
+  };
+}, {})(Table);

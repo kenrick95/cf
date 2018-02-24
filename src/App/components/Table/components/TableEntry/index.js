@@ -5,7 +5,7 @@ class TableEntry extends React.Component {
     super();
   }
   render() {
-    const { id, date, category, name, location, amount } = this.props;
+    const { number: id, date, category, name, location, amount } = this.props;
     return (
       <tr className="table-entry">
         <td>{id}</td>

@@ -6,22 +6,26 @@ import PouchDB from 'pouchdb-browser';
 
 export default function configureStore() {
   const db = new PouchDB('cf');
+  // db.changes({
+  //   since: 'now',
+  //   live: true
+  // });
 
   const pouchMiddleware = PouchMiddleware({
-    path: '/todos',
+    path: '/cf',
     db,
     actions: {
       remove: doc => {
-        return { type: types.DELETE_ENTRY, id: doc._id };
+        return { type: types.DELETE_ENTRY, payload: { id: doc._id } };
       },
       insert: doc => {
-        return { type: types.INSERT_ENTRY, todo: doc };
+        return { type: types.INSERT_ENTRY, payload: { doc } };
       },
       batchInsert: docs => {
-        return { type: types.BATCH_INSERT_ENTRY, todos: docs };
+        return { type: types.BATCH_INSERT_ENTRY, payload: { docs } };
       },
       update: doc => {
-        return { type: types.UPDATE_ENTRY, todo: doc };
+        return { type: types.UPDATE_ENTRY, payload: { doc } };
       }
     }
   });

@@ -1,17 +1,20 @@
 import React from 'react';
 import Table from './components/Table';
 import configureStore from './redux/configureStore';
+import { Provider } from 'react-redux';
 
 class App extends React.Component {
   constructor() {
     super();
-    configureStore();
+    this.store = configureStore();
   }
   render() {
     return (
-      <div className="app">
-        <Table />
-      </div>
+      <Provider store={this.store}>
+        <div className="app">
+          <Table />
+        </div>
+      </Provider>
     );
   }
 }
