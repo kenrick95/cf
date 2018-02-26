@@ -11,9 +11,11 @@ Requirements:
 
 ## TODOs
 
-- [ ] Restructure using React, build using Parcel
-- [ ] Integrate with PouchDB (pouchdb-browser)
-- [ ] Integrate Pouchdb with Redux (pouch-redux-middleware)
+- [x] Restructure using React, build using Parcel
+- [x] Integrate with PouchDB (pouchdb-browser)
+- [x] Integrate Pouchdb with Redux (pouch-redux-middleware)
+- [ ] Migrate to TypeScript, annotate stuffs
+- [ ] Complete redux actions & reducers
 - [ ] Filter by month
 - [ ] Filter deleted
 - [ ] Double click to edit record

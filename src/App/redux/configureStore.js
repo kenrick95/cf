@@ -6,13 +6,9 @@ import PouchDB from 'pouchdb-browser';
 
 export default function configureStore() {
   const db = new PouchDB('cf');
-  // db.changes({
-  //   since: 'now',
-  //   live: true
-  // });
 
   const pouchMiddleware = PouchMiddleware({
-    path: '/cf',
+    path: '/entries/items',
     db,
     actions: {
       remove: doc => {
