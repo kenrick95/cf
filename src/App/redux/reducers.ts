@@ -9,14 +9,41 @@ const initialState = {
   items: []
 };
 
-function entryReducer(state = initialState, action) {
+function entryReducer(state: EntryReducer = initialState, action) {
   const actionMatcher = {
-    [types.INSERT_ENTRY]: (state, action) => {
+    [types.INSERT_ENTRY]: (state: EntryReducer, action) => {
       return {
         items: state.items.concat([action.payload.doc])
       };
     },
-    [types.BATCH_INSERT_ENTRY]: (state, action) => {
+    [types.UPDATE_ENTRY]: (state: EntryReducer, action) => {
+      const currentItems = state.items;
+      const updatedEntry = action.payload.doc;
+      const updatedIndex = currentItems.findIndex(entry => {
+        return entry._id === updatedEntry._id;
+      });
+      return {
+        items: [
+          ...currentItems.slice(0, updatedIndex),
+          updatedEntry,
+          ...currentItems.slice(updatedIndex + 1)
+        ]
+      };
+    },
+    [types.DELETE_ENTRY]: (state: EntryReducer, action) => {
+      const currentItems = state.items;
+      const updatedEntry = action.payload.doc;
+      const updatedIndex = currentItems.findIndex(entry => {
+        return entry._id === updatedEntry._id;
+      });
+      return {
+        items: [
+          ...currentItems.slice(0, updatedIndex),
+          ...currentItems.slice(updatedIndex + 1)
+        ]
+      };
+    },
+    [types.BATCH_INSERT_ENTRY]: (state: EntryReducer, action) => {
       return {
         items: state.items.concat(action.payload.docs)
       };

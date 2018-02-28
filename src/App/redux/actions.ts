@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 
-import { Entry } from '../types/entry';
+import { Entry, EntryDocument } from '../types/entry';
 
 export function addEntry(entry: Entry) {
   const _id = `${entry.date}-${entry.number}`;
@@ -12,5 +12,17 @@ export function addEntry(entry: Entry) {
         _id
       }
     }
+  };
+}
+export function updateEntry(entry: EntryDocument) {
+  return {
+    type: types.UPDATE_ENTRY,
+    payload: { ...entry }
+  };
+}
+export function deleteEntry(entry: EntryDocument) {
+  return {
+    type: types.DELETE_ENTRY,
+    payload: { ...entry }
   };
 }
