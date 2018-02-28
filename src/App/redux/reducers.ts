@@ -1,6 +1,10 @@
 import { combineReducers } from 'redux';
 import * as types from './actionTypes';
+import { EntryDocument } from '../types/entry';
 
+export type EntryReducer = {
+  items: EntryDocument[];
+};
 const initialState = {
   items: []
 };
@@ -28,5 +32,9 @@ function entryReducer(state = initialState, action) {
 const rootReducer = combineReducers({
   entries: entryReducer
 });
+
+export interface ReduxStore {
+  entries: EntryReducer;
+}
 
 export default rootReducer;

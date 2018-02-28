@@ -4,7 +4,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './reducers';
 import PouchDB from 'pouchdb-browser';
 declare global {
-  interface Window { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any; }
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
+  }
 }
 
 export default function configureStore() {

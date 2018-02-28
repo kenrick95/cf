@@ -1,13 +1,7 @@
 import * as React from 'react';
+import { Entry } from '../../../../types/entry';
 
-interface Props {
-  number: number;
-  date: string;
-  category: string;
-  name: string;
-  location: string;
-  amount: number;
-}
+interface Props extends Entry {}
 
 class TableEntry extends React.Component<Props> {
   constructor(props) {

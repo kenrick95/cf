@@ -1,13 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import Table from './components/Table';
 import configureStore from './redux/configureStore';
 import { Provider } from 'react-redux';
-import { Store } from 'react-redux';
+import { Store } from 'redux';
 
-class App extends React.Component {
-  store: Store;
-  constructor() {
-    super();
+type Props = {};
+
+class App extends React.Component<Props> {
+  store: Store<{}>;
+  constructor(props: Props) {
+    super(props);
     this.store = configureStore();
   }
   render() {

@@ -1,8 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { addEntry } from '../../../../redux/actions';
 
-class TableInput extends React.Component {
+interface PropsFromActions {
+  addEntry: typeof addEntry;
+}
+interface Props extends PropsFromActions {}
+
+
+class TableInput extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,7 +24,7 @@ class TableInput extends React.Component {
     });
   }
   render() {
-    const { id, date, category, name, location, amount } = this.props;
+    // const { id, date, category, name, location, amount } = this.props;
     return (
       <tr className="table-input">
         <td className="table-input__id">

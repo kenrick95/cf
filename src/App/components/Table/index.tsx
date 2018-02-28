@@ -1,13 +1,21 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import TableHeader from './components/TableHeader';
 import TableEntry from './components/TableEntry';
 import TableInput from './components/TableInput';
 import TableFooter from './components/TableFooter';
 
-class Table extends React.Component {
-  constructor() {
-    super();
+import { EntryDocument } from '../../types/entry';
+import { ReduxStore } from '../../redux/reducers';
+
+interface PropsFromStore {
+  entries: EntryDocument[];
+}
+interface Props extends PropsFromStore {}
+
+class Table extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
   }
   render() {
     const { entries } = this.props;
@@ -22,7 +30,8 @@ class Table extends React.Component {
         </tbody>
         <TableFooter
           total={entries.reduce(
-            (previousValue, currentValue) => previousValue + currentValue,
+            (previousValue: number, entry: EntryDocument) =>
+              previousValue + entry.amount,
             0
           )}
         />
@@ -31,7 +40,7 @@ class Table extends React.Component {
   }
 }
 
-export default connect(state => {
+function mapStateToProps(state: ReduxStore): PropsFromStore {
   return {
     entries:
       state &&
@@ -41,4 +50,6 @@ export default connect(state => {
         ? state.entries.items
         : []
   };
-}, {})(Table);
+}
+
+export default connect(mapStateToProps)(Table);
