@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { addEntry } from '../../../../redux/actions';
 
 class TableInput extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit() {

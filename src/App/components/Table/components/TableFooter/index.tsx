@@ -1,15 +1,19 @@
-import React from 'react';
+import * as React from "react";
 
-class TableFooter extends React.Component {
-  constructor() {
-    super();
+interface Props {
+  total: number;
+}
+
+class TableFooter extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
   }
   render() {
     const { total } = this.props;
     return (
       <tfoot className="table-header">
         <tr>
-          <td colSpan="5">&nbsp;</td>
+          <td colSpan={5}>&nbsp;</td>
           <td>{total}</td>
           <td>&nbsp;</td>
         </tr>

@@ -20,7 +20,12 @@ class Table extends React.Component {
           })}
           <TableInput />
         </tbody>
-        <TableFooter />
+        <TableFooter
+          total={entries.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+          )}
+        />
       </table>
     );
   }

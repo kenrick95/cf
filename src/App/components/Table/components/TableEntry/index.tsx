@@ -1,8 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 
-class TableEntry extends React.Component {
-  constructor() {
-    super();
+interface Props {
+  number: number;
+  date: string;
+  category: string;
+  name: string;
+  location: string;
+  amount: number;
+}
+
+class TableEntry extends React.Component<Props> {
+  constructor(props) {
+    super(props);
   }
   render() {
     const { number: id, date, category, name, location, amount } = this.props;
