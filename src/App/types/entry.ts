@@ -5,6 +5,7 @@ interface EntryCommon {
   name: string;
   location: string;
   amount: number;
+  deleted: boolean;
 }
 export interface Entry extends EntryCommon {}
 export interface EntryDocument extends EntryCommon {

@@ -26,7 +26,9 @@ class Table extends React.Component<Props> {
           {entries.map(entry => {
             return <TableEntry key={entry._id} {...entry} />;
           })}
-          <TableInput />
+        </tbody>
+        <tbody>
+          <TableInput number={entries.length + 1} />
         </tbody>
         <TableFooter
           total={entries.reduce(

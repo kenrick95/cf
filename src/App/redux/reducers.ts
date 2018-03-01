@@ -39,6 +39,10 @@ function entryReducer(state: EntryReducer = initialState, action) {
       return {
         items: [
           ...currentItems.slice(0, updatedIndex),
+          {
+            ...updatedEntry,
+            deleted: true
+          },
           ...currentItems.slice(updatedIndex + 1)
         ]
       };
