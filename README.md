@@ -16,6 +16,7 @@ Requirements:
 - [x] Integrate Pouchdb with Redux (pouch-redux-middleware)
 - [x] Migrate to TypeScript, annotate stuffs
 - [x] Complete redux actions & reducers
+- [x] Stylize a bit
 - [ ] Filter by month
 - [ ] Filter deleted
 - [ ] Double click to edit record

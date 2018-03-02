@@ -1,96 +1,42 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { addEntry } from '../../../../redux/actions';
 import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
+import { Entry } from '../../../../types/entry';
 
-interface PropsFromActions {
-  addEntry: typeof addEntry;
-}
-interface Props extends PropsFromActions {
-  number: number;
-}
-interface State {
-  date: string;
-  category: string;
-  name: string;
-  location: string;
-  amount: number;
+import './style.scss';
+
+interface Props extends Entry {
+  handleDateChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleCategoryChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleNameChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleLocationChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleAmountChanged: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 class TableInput extends React.Component<Props> {
-  state: State;
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDateChanged = this.handleDateChanged.bind(this);
-    this.handleCategoryChanged = this.handleCategoryChanged.bind(this);
-    this.handleNameChanged = this.handleNameChanged.bind(this);
-    this.handleLocationChanged = this.handleLocationChanged.bind(this);
-    this.handleAmountChanged = this.handleAmountChanged.bind(this);
-    this.state = {
-      date: formatDate(new Date(), ISO_8601_DATE_FORMAT),
-      category: '',
-      name: '',
-      location: '',
-      amount: 0
-    };
   }
-  resetInput() {
-    this.setState({
-      date: formatDate(new Date(), ISO_8601_DATE_FORMAT),
-      category: '',
-      name: '',
-      location: '',
-      amount: 0
-    });
-  }
-  handleDateChanged(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({
-      date: formatDate(new Date(e.currentTarget.value), ISO_8601_DATE_FORMAT)
-    });
-  }
-  handleCategoryChanged(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({
-      category: e.currentTarget.value
-    });
-  }
-  handleNameChanged(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({
-      name: e.currentTarget.value
-    });
-  }
-  handleLocationChanged(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({
-      location: e.currentTarget.value
-    });
-  }
-  handleAmountChanged(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({
-      amount: e.currentTarget.value
-    });
-  }
-  handleSubmit() {
-    const { date, category, name, location, amount } = this.state;
-    const { number } = this.props;
-    this.props.addEntry({
+
+  render() {
+    const {
       number,
+      handleDateChanged,
+      handleCategoryChanged,
+      handleNameChanged,
+      handleLocationChanged,
+      handleAmountChanged,
       date,
       category,
       name,
       location,
-      amount,
-      deleted: false
-    });
-  }
-
-  render() {
-    const { date, category, name, location, amount } = this.state;
-    const { number } = this.props;
+      amount
+    } = this.props;
     return (
       <tr className="table-input">
         <td className="table-input__id">
           <input
-            className="table-input__id"
+            className="table-input__id-input"
             type="number"
             disabled
             value={number}
@@ -102,7 +48,7 @@ class TableInput extends React.Component<Props> {
             type="date"
             required
             value={date}
-            onChange={this.handleDateChanged}
+            onChange={handleDateChanged}
           />
         </td>
         <td className="table-input__category">
@@ -111,7 +57,7 @@ class TableInput extends React.Component<Props> {
             type="text"
             required
             value={category}
-            onChange={this.handleCategoryChanged}
+            onChange={handleCategoryChanged}
           />
         </td>
         <td className="table-input__name">
@@ -120,7 +66,7 @@ class TableInput extends React.Component<Props> {
             type="text"
             required
             value={name}
-            onChange={this.handleNameChanged}
+            onChange={handleNameChanged}
           />
         </td>
         <td className="table-input__location">
@@ -129,7 +75,7 @@ class TableInput extends React.Component<Props> {
             type="text"
             required
             value={location}
-            onChange={this.handleLocationChanged}
+            onChange={handleLocationChanged}
           />
         </td>
         <td className="table-input__amount">
@@ -140,17 +86,15 @@ class TableInput extends React.Component<Props> {
             min="0.00"
             required
             value={amount}
-            onChange={this.handleAmountChanged}
+            onChange={handleAmountChanged}
           />
         </td>
         <td className="table-input__action">
-          <button type="submit" onClick={this.handleSubmit}>
-            Submit
-          </button>
+          <button type="submit">Submit</button>
         </td>
       </tr>
     );
   }
 }
 
-export default connect(undefined, { addEntry })(TableInput);
+export default TableInput;

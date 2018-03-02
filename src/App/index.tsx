@@ -4,6 +4,9 @@ import configureStore from './redux/configureStore';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 
+import 'normalize.css';
+import './style.scss';
+
 type Props = {};
 
 class App extends React.Component<Props> {

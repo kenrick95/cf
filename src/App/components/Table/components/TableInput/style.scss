@@ -1,0 +1,23 @@
+.table-input {
+  &__id,
+  &__amount {
+    width: 80px;
+  }
+  &__date {
+    width: 120px;
+  }
+  &__category, &__name, &__location {
+    width: 220px;
+  }
+  &__id,
+  &__amount,
+  &__date,
+  &__category,
+  &__name,
+  &__location {
+    padding-right: 10px;
+  }
+  input {
+    width: 100%;
+  }
+}
