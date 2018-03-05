@@ -31,7 +31,7 @@ interface State {
 
 class Table extends React.Component<Props> {
   state: State;
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDateChanged = this.handleDateChanged.bind(this);

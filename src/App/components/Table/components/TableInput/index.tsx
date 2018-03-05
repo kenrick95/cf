@@ -14,7 +14,7 @@ interface Props extends Entry {
 }
 
 class TableInput extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
   }
 

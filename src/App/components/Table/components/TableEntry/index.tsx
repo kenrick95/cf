@@ -6,7 +6,7 @@ import './style.scss';
 interface Props extends Entry {}
 
 class TableEntry extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
   }
   render() {
