@@ -1,0 +1,12 @@
+.filter-toggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.filter-toggle-checkbox {
+    flex: 0 1 auto;
+}
+.filter-toggle-name {
+    flex: 0 1 auto;
+    margin-left: 0.5rem;
+}

@@ -1,12 +1,17 @@
 import { combineReducers } from 'redux';
 import * as types from './actionTypes';
 import { EntryDocument } from '../types/entry';
+import { Filter } from '../types/filter';
 
 export type EntryReducer = {
   items: EntryDocument[];
+  activeFilters: {
+    [name: string]: string;
+  };
 };
 const initialState = {
-  items: [] as EntryDocument[]
+  items: [] as EntryDocument[],
+  activeFilters: {}
 };
 
 function entryReducer(
@@ -24,6 +29,7 @@ function entryReducer(
       action: { type: string; payload: { doc: EntryDocument } }
     ) => {
       return {
+        ...state,
         items: state.items.concat([action.payload.doc])
       };
     },
@@ -37,6 +43,7 @@ function entryReducer(
         return entry._id === updatedEntry._id;
       });
       return {
+        ...state,
         items: [
           ...currentItems.slice(0, updatedIndex),
           updatedEntry,
@@ -62,6 +69,7 @@ function entryReducer(
         }
       }
       return {
+        ...state,
         items: [
           ...currentItems.slice(0, updatedIndex),
           {
@@ -77,7 +85,20 @@ function entryReducer(
       action: { type: string; payload: { docs: EntryDocument[] } }
     ) => {
       return {
+        ...state,
         items: state.items.concat(action.payload.docs)
+      };
+    },
+    [types.UPDATE_FILTER]: (
+      state: EntryReducer,
+      action: { type: string; payload: { filter: Filter } }
+    ) => {
+      return {
+        ...state,
+        activeFilters: {
+          ...state.activeFilters,
+          [action.payload.filter.name]: action.payload.filter.name
+        }
       };
     }
   };

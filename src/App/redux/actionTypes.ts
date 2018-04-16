@@ -2,3 +2,4 @@ export const DELETE_ENTRY = 'DELETE_ENTRY';
 export const INSERT_ENTRY = 'INSERT_ENTRY';
 export const BATCH_INSERT_ENTRY = 'BATCH_INSERT_ENTRY';
 export const UPDATE_ENTRY = 'UPDATE_ENTRY';
+export const UPDATE_FILTER = 'UPDATE_FILTER';

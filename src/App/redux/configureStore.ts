@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import * as PouchMiddleware from 'pouch-redux-middleware';
+import PouchMiddleware from 'pouch-redux-middleware';
 import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './reducers';
 import PouchDB from 'pouchdb-browser';
