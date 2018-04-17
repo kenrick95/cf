@@ -11,6 +11,7 @@ import { addEntry } from '../../redux/actions';
 import { formatDate, ISO_8601_DATE_FORMAT } from '../../utils/date';
 
 import './style.scss';
+import { getEntries } from '../../redux/selector';
 
 interface PropsFromStore {
   entries: EntryDocument[];
@@ -96,7 +97,7 @@ class Table extends React.Component<Props> {
     this.resetInput();
   }
   render() {
-    const { entries} = this.props;
+    const { entries } = this.props;
     const { date, category, name, location, amount } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
@@ -138,14 +139,10 @@ class Table extends React.Component<Props> {
 
 function mapStateToProps(state: ReduxStore): PropsFromStore {
   return {
-    entries:
-      state &&
-      state.entries &&
-      state.entries.items &&
-      state.entries.items.length > 0
-        ? state.entries.items
-        : []
+    entries: getEntries(state.entries)
   };
 }
 
-export default connect(mapStateToProps, { addEntry })(Table);
+export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
+  addEntry
+})(Table);

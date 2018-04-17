@@ -17,8 +17,8 @@ Requirements:
 - [x] Migrate to TypeScript, annotate stuffs
 - [x] Complete redux actions & reducers
 - [x] Stylize a bit
-- [ ] Filter by month
-- [ ] Filter deleted
+- [x] Filter by month
+- [x] Filter deleted
 - [ ] Double click to edit record
 - [ ] Autocompletion
 - [ ] export & import to file, preferably .xlsx

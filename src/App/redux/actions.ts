@@ -27,9 +27,9 @@ export function deleteEntry(entry: EntryDocument) {
     payload: { ...entry }
   };
 }
-export function updateFilter(filter: Filter) {
+export function updateFilter(filter: Filter, filterValue?: string) {
   return {
     type: types.UPDATE_FILTER,
-    payload: { filter }
+    payload: { filter, filterValue }
   };
 }

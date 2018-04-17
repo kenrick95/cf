@@ -13,8 +13,9 @@ export function getEntries(entriesState: EntryReducer) {
   let transformedItems = items.slice();
   for (const filterName of filters) {
     const filter = FILTERS.find(filter => filter.name === filterName);
+    const filterValue = entriesState.activeFilters[filterName];
     if (filter) {
-      transformedItems = filter.function(transformedItems);
+      transformedItems = filter.function(transformedItems, filterValue);
     }
   }
 

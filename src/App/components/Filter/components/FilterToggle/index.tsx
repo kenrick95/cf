@@ -3,13 +3,17 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { updateFilter } from '../../../../redux/actions';
 import { Filter } from '../../../../types/filter';
+import { ReduxStore } from '../../../../redux/reducers';
 
 import './style.scss';
 
 interface PropsFromActions {
   updateFilter: typeof updateFilter;
 }
-interface Props extends PropsFromActions {
+interface PropsFromStore {
+  isFilterActive: boolean;
+}
+interface Props extends PropsFromActions, PropsFromStore {
   filter: Filter;
 }
 
@@ -19,19 +23,37 @@ class FilterToggle extends React.Component<Props> {
     this.handleCheck = this.handleCheck.bind(this);
   }
   handleCheck() {
-    this.props.updateFilter(this.props.filter);
+    const { isFilterActive, filter } = this.props;
+    this.props.updateFilter(filter, isFilterActive ? null : filter.name);
   }
   render() {
-    const { filter } = this.props;
+    const { filter, isFilterActive } = this.props;
     return (
-      <label className="filter-toggle">
-        <input type="checkbox" onChange={this.handleCheck} className="filter-toggle-checkbox" />
-        <div className="filter-toggle-name">{filter.name}</div>
-      </label>
+      <>
+        <input
+          type="checkbox"
+          onChange={this.handleCheck}
+          className="filter-toggle-checkbox"
+          id={filter.name}
+          checked={isFilterActive}
+        />
+        <label className="filter-toggle-name" htmlFor={filter.name}>
+          {filter.name}
+        </label>
+      </>
     );
   }
 }
 
-export default connect(null, {
+function mapStateToProps(state: ReduxStore, ownProps: Props): PropsFromStore {
+  const { filter } = ownProps;
+  const isFilterActive = state.entries
+    ? !!state.entries.activeFilters[filter.name]
+    : false;
+  return {
+    isFilterActive
+  };
+}
+export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
   updateFilter
 })(FilterToggle);

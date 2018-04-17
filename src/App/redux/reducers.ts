@@ -91,14 +91,24 @@ function entryReducer(
     },
     [types.UPDATE_FILTER]: (
       state: EntryReducer,
-      action: { type: string; payload: { filter: Filter } }
+      action: {
+        type: string;
+        payload: { filter: Filter; filterValue?: string };
+      }
     ) => {
+      const filterName = action.payload.filter.name;
+      const filterValue = action.payload.filterValue;
+      const newActiveFilters = { ...state.activeFilters };
+      if (filterValue) {
+        newActiveFilters[filterName] = filterValue ? filterValue : filterName;
+      } else {
+        if (newActiveFilters[filterName]) {
+          delete newActiveFilters[filterName];
+        }
+      }
       return {
         ...state,
-        activeFilters: {
-          ...state.activeFilters,
-          [action.payload.filter.name]: action.payload.filter.name
-        }
+        activeFilters: newActiveFilters
       };
     }
   };
