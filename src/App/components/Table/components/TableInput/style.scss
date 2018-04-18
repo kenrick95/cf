@@ -6,7 +6,9 @@
   &__date {
     width: 120px;
   }
-  &__category, &__name, &__location {
+  &__category,
+  &__name,
+  &__location {
     width: 220px;
   }
   &__id,

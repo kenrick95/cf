@@ -1,11 +1,15 @@
 .table-entry {
-    &__number {
-        min-width: 2rem;
-    }
-    &__number, &__amount {
-        text-align: right;
-    }
-    &__date, &__category, &__name, &__location {
-        text-align: left;
-    }
+  &__number {
+    min-width: 2rem;
+  }
+  &__number,
+  &__amount {
+    text-align: right;
+  }
+  &__date,
+  &__category,
+  &__name,
+  &__location {
+    text-align: left;
+  }
 }
