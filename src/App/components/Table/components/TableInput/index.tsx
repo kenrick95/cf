@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
-import { Entry } from '../../../../types/entry';
+import { Entry, EntryDocument } from '../../../../types/entry';
+import Autocomplete from 'react-autocomplete';
 
 import './style.scss';
+import { getNamesFromEntries, matchItemToTerm, identityFn } from './util';
 
 interface Props extends Entry {
   handleDateChanged: (e: React.FormEvent<HTMLInputElement>) => void;
   handleCategoryChanged: (e: React.FormEvent<HTMLInputElement>) => void;
-  handleNameChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleNameChanged: (newValue: string) => void;
   handleLocationChanged: (e: React.FormEvent<HTMLInputElement>) => void;
   handleAmountChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  entries: EntryDocument[];
 }
 
 class TableInput extends React.Component<Props> {
@@ -30,7 +33,8 @@ class TableInput extends React.Component<Props> {
       category,
       name,
       location,
-      amount
+      amount,
+      entries
     } = this.props;
     return (
       <tr className="table-input">
@@ -61,12 +65,31 @@ class TableInput extends React.Component<Props> {
           />
         </td>
         <td className="table-input__name">
-          <input
-            className="table-input__name-input"
-            type="text"
-            required
+          <Autocomplete
             value={name}
-            onChange={handleNameChanged}
+            inputProps={{
+              className: 'table-input__name-input',
+              type: 'text',
+              required: true
+            }}
+            onChange={(e: Event, newValue: string) => {
+              // TODO This is quite inefficient, see if we can unify onChange and onSelect
+              handleNameChanged(newValue);
+            }}
+            onSelect={handleNameChanged}
+            items={getNamesFromEntries(entries)}
+            getItemValue={identityFn}
+            shouldItemRender={matchItemToTerm}
+            renderItem={(item: string, isHighlighted: boolean) => (
+              <div
+                className={`autocomplete-item ${
+                  isHighlighted ? 'autocomplete-item-highlighted' : ''
+                }`}
+                key={item}
+              >
+                {item}
+              </div>
+            )}
           />
         </td>
         <td className="table-input__location">

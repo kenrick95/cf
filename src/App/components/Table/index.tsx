@@ -67,9 +67,9 @@ class Table extends React.Component<Props> {
       category: e.currentTarget.value
     });
   }
-  handleNameChanged(e: React.FormEvent<HTMLInputElement>) {
+  handleNameChanged(newValue: string) {
     this.setState({
-      name: e.currentTarget.value
+      name: newValue
     });
   }
   handleLocationChanged(e: React.FormEvent<HTMLInputElement>) {
@@ -110,6 +110,7 @@ class Table extends React.Component<Props> {
           </tbody>
           <tbody>
             <TableInput
+              entries={entries}
               number={entries.length + 1}
               handleDateChanged={this.handleDateChanged}
               handleCategoryChanged={this.handleCategoryChanged}
