@@ -20,6 +20,6 @@ Requirements:
 - [x] Filter by month
 - [x] Filter deleted
 - [ ] Double click to edit record
-- [ ] Autocompletion
+- [x] Autocompletion
 - [ ] export & import to file, preferably .xlsx
 - [ ] Monthly summary, reports, visualization

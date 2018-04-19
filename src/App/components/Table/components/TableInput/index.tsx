@@ -4,22 +4,53 @@ import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
 import { Entry, EntryDocument } from '../../../../types/entry';
 import Autocomplete from 'react-autocomplete';
 
+import AutocompleteItem from './components/AutocompleteItem';
+import { matchItemToTerm, identityFn } from './util';
+
 import './style.scss';
-import { getNamesFromEntries, matchItemToTerm, identityFn } from './util';
 
 interface Props extends Entry {
   handleDateChanged: (e: React.FormEvent<HTMLInputElement>) => void;
-  handleCategoryChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleCategoryChanged: (newValue: string) => void;
   handleNameChanged: (newValue: string) => void;
-  handleLocationChanged: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleLocationChanged: (newValue: string) => void;
   handleAmountChanged: (e: React.FormEvent<HTMLInputElement>) => void;
-  entries: EntryDocument[];
+  autocompleteNames: string[];
+  autocompleteCategories: string[];
+  autocompleteLocations: string[];
 }
 
 class TableInput extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
+
+  handleCategoryInputChanged = (
+    e: React.FormEvent<HTMLInputElement>,
+    newValue: string
+  ) => {
+    const { handleCategoryChanged } = this.props;
+    handleCategoryChanged(newValue);
+  };
+  handleNameInputChanged = (
+    e: React.FormEvent<HTMLInputElement>,
+    newValue: string
+  ) => {
+    const { handleNameChanged } = this.props;
+    handleNameChanged(newValue);
+  };
+  handleLocationInputChanged = (
+    e: React.FormEvent<HTMLInputElement>,
+    newValue: string
+  ) => {
+    const { handleLocationChanged } = this.props;
+    handleLocationChanged(newValue);
+  };
+  renderAutocompleteItem = (item: string, isHighlighted: boolean) => {
+    return (
+      <AutocompleteItem item={item} isHighlighted={isHighlighted} key={item} />
+    );
+  };
 
   render() {
     const {
@@ -34,7 +65,9 @@ class TableInput extends React.Component<Props> {
       name,
       location,
       amount,
-      entries
+      autocompleteNames,
+      autocompleteCategories,
+      autocompleteLocations
     } = this.props;
     return (
       <tr className="table-input">
@@ -56,12 +89,19 @@ class TableInput extends React.Component<Props> {
           />
         </td>
         <td className="table-input__category">
-          <input
-            className="table-input__category-input"
-            type="text"
-            required
+          <Autocomplete
             value={category}
-            onChange={handleCategoryChanged}
+            inputProps={{
+              className: 'table-input__category-input',
+              type: 'text',
+              required: true
+            }}
+            onChange={this.handleCategoryInputChanged}
+            onSelect={handleCategoryChanged}
+            items={autocompleteCategories}
+            getItemValue={identityFn}
+            shouldItemRender={matchItemToTerm}
+            renderItem={this.renderAutocompleteItem}
           />
         </td>
         <td className="table-input__name">
@@ -72,33 +112,28 @@ class TableInput extends React.Component<Props> {
               type: 'text',
               required: true
             }}
-            onChange={(e: Event, newValue: string) => {
-              // TODO This is quite inefficient, see if we can unify onChange and onSelect
-              handleNameChanged(newValue);
-            }}
+            onChange={this.handleNameInputChanged}
             onSelect={handleNameChanged}
-            items={getNamesFromEntries(entries)}
+            items={autocompleteNames}
             getItemValue={identityFn}
             shouldItemRender={matchItemToTerm}
-            renderItem={(item: string, isHighlighted: boolean) => (
-              <div
-                className={`autocomplete-item ${
-                  isHighlighted ? 'autocomplete-item-highlighted' : ''
-                }`}
-                key={item}
-              >
-                {item}
-              </div>
-            )}
+            renderItem={this.renderAutocompleteItem}
           />
         </td>
         <td className="table-input__location">
-          <input
-            className="table-input__location-input"
-            type="text"
-            required
+          <Autocomplete
             value={location}
-            onChange={handleLocationChanged}
+            inputProps={{
+              className: 'table-input__location-input',
+              type: 'text',
+              required: true
+            }}
+            onChange={this.handleLocationInputChanged}
+            onSelect={handleLocationChanged}
+            items={autocompleteLocations}
+            getItemValue={identityFn}
+            shouldItemRender={matchItemToTerm}
+            renderItem={this.renderAutocompleteItem}
           />
         </td>
         <td className="table-input__amount">
