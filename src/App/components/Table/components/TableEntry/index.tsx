@@ -3,17 +3,24 @@ import { Entry } from '../../../../types/entry';
 
 import './style.scss';
 
-interface Props extends Entry {}
+interface Props extends Entry {
+  onDoubleClick: (index: number) => void;
+  index: number;
+}
 
 class TableEntry extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
+    this.handleDoubleClick = this.handleDoubleClick.bind(this);
+  }
+  handleDoubleClick() {
+    this.props.onDoubleClick(this.props.index);
   }
   render() {
-    const { number: id, date, category, name, location, amount } = this.props;
+    const { number, date, category, name, location, amount } = this.props;
     return (
-      <tr className="table-entry">
-        <td className="table-entry__id">{id}</td>
+      <tr className="table-entry" onDoubleClick={this.handleDoubleClick}>
+        <td className="table-entry__id">{number}</td>
         <td className="table-entry__date">{date}</td>
         <td className="table-entry__category">{category}</td>
         <td className="table-entry__name">{name}</td>

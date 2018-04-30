@@ -38,10 +38,14 @@ function entryReducer(
       action: { type: string; payload: { doc: EntryDocument } }
     ) => {
       const currentItems = state.items;
-      const updatedEntry = action.payload.doc;
       const updatedIndex = currentItems.findIndex((entry: EntryDocument) => {
-        return entry._id === updatedEntry._id;
+        return entry._id === action.payload.doc._id;
       });
+      const currentItem = currentItems[updatedIndex];
+      const updatedEntry = {
+        ...currentItem,
+        ...action.payload.doc,
+      };
       return {
         ...state,
         items: [

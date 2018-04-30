@@ -18,13 +18,17 @@ export function addEntry(entry: Entry) {
 export function updateEntry(entry: EntryDocument) {
   return {
     type: types.UPDATE_ENTRY,
-    payload: { ...entry }
+    payload: {
+      doc: { ...entry }
+    }
   };
 }
 export function deleteEntry(entry: EntryDocument) {
   return {
     type: types.DELETE_ENTRY,
-    payload: { ...entry }
+    payload: {
+      _id: entry._id
+    }
   };
 }
 export function updateFilter(filter: Filter, filterValue?: string) {

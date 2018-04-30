@@ -10,4 +10,5 @@ interface EntryCommon {
 export interface Entry extends EntryCommon {}
 export interface EntryDocument extends EntryCommon {
   _id: string;
+  _rev: string;
 }

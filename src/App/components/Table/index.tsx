@@ -7,7 +7,7 @@ import TableFooter from './components/TableFooter';
 
 import { EntryDocument } from '../../types/entry';
 import { ReduxStore } from '../../redux/reducers';
-import { addEntry } from '../../redux/actions';
+import { addEntry, updateEntry } from '../../redux/actions';
 import { formatDate, ISO_8601_DATE_FORMAT } from '../../utils/date';
 import {
   getNamesFromEntries,
@@ -24,6 +24,7 @@ interface PropsFromStore {
 
 interface PropsFromActions {
   addEntry: typeof addEntry;
+  updateEntry: typeof updateEntry;
 }
 interface Props extends PropsFromStore, PropsFromActions {}
 
@@ -33,6 +34,7 @@ interface State {
   name: string;
   location: string;
   amount: number;
+  editingEntryIndex: number;
 }
 
 class Table extends React.Component<Props> {
@@ -45,12 +47,14 @@ class Table extends React.Component<Props> {
     this.handleNameChanged = this.handleNameChanged.bind(this);
     this.handleLocationChanged = this.handleLocationChanged.bind(this);
     this.handleAmountChanged = this.handleAmountChanged.bind(this);
+    this.handleEntryEditing = this.handleEntryEditing.bind(this);
     this.state = {
       date: formatDate(new Date(), ISO_8601_DATE_FORMAT),
       category: '',
       name: '',
       location: '',
-      amount: 0
+      amount: 0,
+      editingEntryIndex: this.props.entries.length
     };
   }
   resetInput() {
@@ -59,7 +63,8 @@ class Table extends React.Component<Props> {
       category: '',
       name: '',
       location: '',
-      amount: 0
+      amount: 0,
+      editingEntryIndex: this.props.entries.length
     });
   }
   handleDateChanged(e: React.FormEvent<HTMLInputElement>) {
@@ -89,48 +94,126 @@ class Table extends React.Component<Props> {
   }
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { date, category, name, location, amount } = this.state;
-    this.props.addEntry({
-      number: this.props.entries.length + 1,
+    const {
       date,
       category,
       name,
       location,
       amount,
-      deleted: false
-    });
+      editingEntryIndex
+    } = this.state;
+    console.log('handle submit', this.state);
+
+    if (editingEntryIndex === this.props.entries.length) {
+      this.props.addEntry({
+        number: editingEntryIndex + 1,
+        date,
+        category,
+        name,
+        location,
+        amount,
+        deleted: false
+      });
+    } else {
+      const { _id, number } = this.props.entries[editingEntryIndex];
+      this.props.updateEntry({
+        number,
+        date,
+        category,
+        name,
+        location,
+        amount,
+        deleted: false,
+        _id
+      });
+    }
+
     this.resetInput();
   }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.entries.length !== prevProps.entries.length) {
+      this.setState({
+        editingEntryIndex: this.props.entries.length
+      });
+    }
+  }
+
+  handleEntryEditing(index: number) {
+    const { entries } = this.props;
+    const entry = entries[index];
+    if (!entry) {
+      return;
+    }
+    const { date, category, name, location, amount } = entry;
+
+    this.setState({
+      editingEntryIndex: index,
+      date,
+      category,
+      name,
+      location,
+      amount
+    });
+  }
+
   render() {
     const { entries } = this.props;
-    const { date, category, name, location, amount } = this.state;
+    const {
+      date,
+      category,
+      name,
+      location,
+      amount,
+      editingEntryIndex
+    } = this.state;
+    const number =
+      entries.length === editingEntryIndex
+        ? entries.length + 1
+        : entries[editingEntryIndex].number;
+
+    const inputComponent = (
+      <TableInput
+        key="edit"
+        handleDateChanged={this.handleDateChanged}
+        handleCategoryChanged={this.handleCategoryChanged}
+        handleNameChanged={this.handleNameChanged}
+        handleLocationChanged={this.handleLocationChanged}
+        handleAmountChanged={this.handleAmountChanged}
+        number={number}
+        date={date}
+        category={category}
+        name={name}
+        location={location}
+        amount={amount}
+        deleted={false}
+        autocompleteCategories={getCategoriesFromEntries(entries)}
+        autocompleteNames={getNamesFromEntries(entries)}
+        autocompleteLocations={getLocationsFromEntries(entries)}
+      />
+    );
+
     return (
       <form onSubmit={this.handleSubmit}>
         <table className="table">
           <TableHeader />
           <tbody>
-            {entries.map(entry => {
-              return <TableEntry key={entry._id} {...entry} />;
+            {entries.map((entry, index) => {
+              if (index === editingEntryIndex) {
+                return inputComponent;
+              }
+              return (
+                <TableEntry
+                  key={entry._id}
+                  {...entry}
+                  index={index}
+                  onDoubleClick={this.handleEntryEditing}
+                />
+              );
             })}
           </tbody>
           <tbody>
-            <TableInput
-              number={entries.length + 1}
-              handleDateChanged={this.handleDateChanged}
-              handleCategoryChanged={this.handleCategoryChanged}
-              handleNameChanged={this.handleNameChanged}
-              handleLocationChanged={this.handleLocationChanged}
-              handleAmountChanged={this.handleAmountChanged}
-              date={date}
-              category={category}
-              name={name}
-              location={location}
-              amount={amount}
-              deleted={false}
-              autocompleteCategories={getCategoriesFromEntries(entries)}
-              autocompleteNames={getNamesFromEntries(entries)}
-              autocompleteLocations={getLocationsFromEntries(entries)}
-            />
+            {entries.length === editingEntryIndex ? inputComponent : null}
           </tbody>
           <TableFooter
             total={entries.reduce(
@@ -152,5 +235,6 @@ function mapStateToProps(state: ReduxStore): PropsFromStore {
 }
 
 export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
-  addEntry
+  addEntry,
+  updateEntry
 })(Table);
