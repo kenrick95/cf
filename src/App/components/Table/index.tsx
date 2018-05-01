@@ -20,6 +20,7 @@ import { getEntries } from '../../redux/selector';
 
 interface PropsFromStore {
   entries: EntryDocument[];
+  unfilteredEntriesLength: number;
 }
 
 interface PropsFromActions {
@@ -54,7 +55,7 @@ class Table extends React.Component<Props> {
       name: '',
       location: '',
       amount: 0,
-      editingEntryIndex: this.props.entries.length
+      editingEntryIndex: this.props.unfilteredEntriesLength
     };
   }
   resetInput() {
@@ -64,7 +65,7 @@ class Table extends React.Component<Props> {
       name: '',
       location: '',
       amount: 0,
-      editingEntryIndex: this.props.entries.length
+      editingEntryIndex: this.props.unfilteredEntriesLength
     });
   }
   handleDateChanged(e: React.FormEvent<HTMLInputElement>) {
@@ -102,9 +103,8 @@ class Table extends React.Component<Props> {
       amount,
       editingEntryIndex
     } = this.state;
-    console.log('handle submit', this.state);
 
-    if (editingEntryIndex === this.props.entries.length) {
+    if (editingEntryIndex === this.props.unfilteredEntriesLength) {
       this.props.addEntry({
         number: editingEntryIndex + 1,
         date,
@@ -115,7 +115,7 @@ class Table extends React.Component<Props> {
         deleted: false
       });
     } else {
-      const { _id, number } = this.props.entries[editingEntryIndex];
+      const { _id, _rev, number } = this.props.entries[editingEntryIndex];
       this.props.updateEntry({
         number,
         date,
@@ -124,7 +124,8 @@ class Table extends React.Component<Props> {
         location,
         amount,
         deleted: false,
-        _id
+        _id,
+        _rev
       });
     }
 
@@ -132,9 +133,11 @@ class Table extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.entries.length !== prevProps.entries.length) {
+    if (
+      this.props.unfilteredEntriesLength !== prevProps.unfilteredEntriesLength
+    ) {
       this.setState({
-        editingEntryIndex: this.props.entries.length
+        editingEntryIndex: this.props.unfilteredEntriesLength
       });
     }
   }
@@ -158,7 +161,7 @@ class Table extends React.Component<Props> {
   }
 
   render() {
-    const { entries } = this.props;
+    const { entries, unfilteredEntriesLength } = this.props;
     const {
       date,
       category,
@@ -168,9 +171,11 @@ class Table extends React.Component<Props> {
       editingEntryIndex
     } = this.state;
     const number =
-      entries.length === editingEntryIndex
-        ? entries.length + 1
-        : entries[editingEntryIndex].number;
+      unfilteredEntriesLength === editingEntryIndex
+        ? unfilteredEntriesLength + 1
+        : entries[editingEntryIndex]
+          ? entries[editingEntryIndex].number
+          : unfilteredEntriesLength + 1;
 
     const inputComponent = (
       <TableInput
@@ -213,7 +218,7 @@ class Table extends React.Component<Props> {
             })}
           </tbody>
           <tbody>
-            {entries.length === editingEntryIndex ? inputComponent : null}
+            {unfilteredEntriesLength === editingEntryIndex ? inputComponent : null}
           </tbody>
           <TableFooter
             total={entries.reduce(
@@ -230,7 +235,8 @@ class Table extends React.Component<Props> {
 
 function mapStateToProps(state: ReduxStore): PropsFromStore {
   return {
-    entries: getEntries(state.entries)
+    entries: getEntries(state.entries),
+    unfilteredEntriesLength: state.entries.items.length
   };
 }
 

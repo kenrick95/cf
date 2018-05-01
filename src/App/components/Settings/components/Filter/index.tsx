@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import './style.scss';
 
-import { FILTERS } from '../../config';
-import { FilterType } from '../../types/filter';
+import { FILTERS } from '../../../../config';
+import { FilterType } from '../../../../types/filter';
 import FilterToggle from './components/FilterToggle';
 import FilterValue from './components/FilterValue';
 
@@ -13,7 +13,7 @@ class Filter extends React.Component<Props> {
   render() {
     return (
       <div className="filter">
-        Filters
+        <div className="filter-title">Filters</div>
         <div className="filter-list">
           {FILTERS.map(filter => {
             if (filter.type === FilterType.Boolean) {

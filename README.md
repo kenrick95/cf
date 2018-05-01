@@ -21,5 +21,6 @@ Requirements:
 - [x] Filter deleted
 - [x] Double click to edit record
 - [x] Autocompletion
-- [ ] export & import to file, preferably .xlsx
+- [x] export to file
+- [ ] import from file
 - [ ] Monthly summary, reports, visualization

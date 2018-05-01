@@ -1824,6 +1824,10 @@ csstype@^2.2.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.4.2.tgz#158e36c69566bf968da63d0ba14eda1c20e8643a"
 
+csv-file-creator@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/csv-file-creator/-/csv-file-creator-1.0.8.tgz#18f4442292baa231d0a575d73f9ca693b8ad1355"
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"

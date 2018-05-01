@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Filter from './components/Filter';
+import Settings from './components/Settings';
 import Table from './components/Table';
 import configureStore from './redux/configureStore';
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ class App extends React.Component<Props> {
     return (
       <Provider store={this.store}>
         <div className="app">
-          <Filter />
+          <Settings />
           <Table />
         </div>
       </Provider>

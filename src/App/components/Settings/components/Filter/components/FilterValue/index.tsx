@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-import { updateFilter } from '../../../../redux/actions';
-import { Filter } from '../../../../types/filter';
-import { ReduxStore } from '../../../../redux/reducers';
-import { EntryDocument } from '../../../../types/entry';
+import { updateFilter } from '../../../../../../redux/actions';
+import { Filter } from '../../../../../../types/filter';
+import { ReduxStore } from '../../../../../../redux/reducers';
+import { EntryDocument } from '../../../../../../types/entry';
 
 import './style.scss';
 interface PropsFromActions {

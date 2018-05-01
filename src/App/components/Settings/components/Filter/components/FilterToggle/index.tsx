@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-import { updateFilter } from '../../../../redux/actions';
-import { Filter } from '../../../../types/filter';
-import { ReduxStore } from '../../../../redux/reducers';
+import { updateFilter } from '../../../../../../redux/actions';
+import { Filter } from '../../../../../../types/filter';
+import { ReduxStore } from '../../../../../../redux/reducers';
 
 import './style.scss';
 

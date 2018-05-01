@@ -12,6 +12,7 @@
     "prettier": "prettier --write \"src/**/*.?(ts|tsx|scss)\""
   },
   "dependencies": {
+    "csv-file-creator": "^1.0.8",
     "normalize.css": "^8.0.0",
     "pouch-redux-middleware": "^1.2.0",
     "pouchdb": "^6.4.3",
