@@ -14,9 +14,9 @@ import {
   getCategoriesFromEntries,
   getLocationsFromEntries
 } from './components/TableInput/util';
+import { getEntries } from '../../redux/selector';
 
 import './style.scss';
-import { getEntries } from '../../redux/selector';
 
 interface PropsFromStore {
   entries: EntryDocument[];
@@ -218,7 +218,9 @@ class Table extends React.Component<Props> {
             })}
           </tbody>
           <tbody>
-            {unfilteredEntriesLength === editingEntryIndex ? inputComponent : null}
+            {unfilteredEntriesLength === editingEntryIndex
+              ? inputComponent
+              : null}
           </tbody>
           <TableFooter
             total={entries.reduce(

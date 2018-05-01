@@ -1,9 +1,12 @@
 import * as React from 'react';
-import Settings from './components/Settings';
-import Table from './components/Table';
+
 import configureStore from './redux/configureStore';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
+
+import Settings from './components/Settings';
+import Table from './components/Table';
+import Summary from './components/Summary';
 
 import 'normalize.css';
 import './style.scss';
@@ -22,6 +25,7 @@ class App extends React.Component<Props> {
         <div className="app">
           <Settings />
           <Table />
+          <Summary />
         </div>
       </Provider>
     );

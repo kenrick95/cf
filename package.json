@@ -12,13 +12,16 @@
     "prettier": "prettier --write \"src/**/*.?(ts|tsx|scss)\""
   },
   "dependencies": {
+    "chart.js": "^2.7.2",
     "csv-file-creator": "^1.0.8",
     "normalize.css": "^8.0.0",
     "pouch-redux-middleware": "^1.2.0",
     "pouchdb": "^6.4.3",
     "pouchdb-browser": "^6.4.3",
+    "randomcolor": "^0.5.3",
     "react": "^16.2.0",
     "react-autocomplete": "^1.8.1",
+    "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0"
@@ -27,6 +30,7 @@
     "@types/jest": "^22.1.4",
     "@types/pouch-redux-middleware": "^0.5.5",
     "@types/pouchdb-browser": "^6.1.2",
+    "@types/randomcolor": "^0.4.3",
     "@types/react": "^16.0.38",
     "@types/react-redux": "^5.0.15",
     "@types/redux": "^3.6.0",

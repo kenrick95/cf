@@ -44,7 +44,7 @@ function entryReducer(
       const currentItem = currentItems[updatedIndex];
       const updatedEntry = {
         ...currentItem,
-        ...action.payload.doc,
+        ...action.payload.doc
       };
       return {
         ...state,
