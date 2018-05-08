@@ -22,5 +22,9 @@ Requirements:
 - [x] Double click to edit record
 - [x] Autocompletion
 - [x] export to file
+
+### Nice to have
 - [ ] import from file
-- [ ] Monthly summary, reports, visualization
+- [ ] Visualization: by category
+- [ ] Visualization: by month
+- [x] Visualization: by location
