@@ -11,6 +11,10 @@
     "test": "jest",
     "prettier": "prettier --write \"src/**/*.?(ts|tsx|scss)\""
   },
+  "repository": {
+    "url": "https://github.com/kenrick95/cf.git",
+    "type": "git"
+  },
   "dependencies": {
     "chart.js": "^2.7.2",
     "csv-file-creator": "^1.0.8",
