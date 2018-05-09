@@ -5,13 +5,60 @@
   "main": "index.html",
   "author": "Kenrick",
   "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --public-url ./",
+    "test": "jest",
+    "prettier": "prettier --write \"src/**/*.?(ts|tsx|scss)\""
+  },
   "dependencies": {
-    "bootstrap": "3",
-    "delta-pouch": "^0.1.7",
-    "jquery": "^1.12.4",
-    "mousetrap": "^1.6.0",
-    "pouchdb": "^6.1.0",
-    "pouchdb-full-sync": "^1.0.5",
-    "pouchdb-upsert": "^2.0.2"
+    "chart.js": "^2.7.2",
+    "csv-file-creator": "^1.0.8",
+    "normalize.css": "^8.0.0",
+    "pouch-redux-middleware": "^1.2.0",
+    "pouchdb": "^6.4.3",
+    "pouchdb-browser": "^6.4.3",
+    "randomcolor": "^0.5.3",
+    "react": "^16.2.0",
+    "react-autocomplete": "^1.8.1",
+    "react-chartjs-2": "^2.7.2",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.1.4",
+    "@types/pouch-redux-middleware": "^0.5.5",
+    "@types/pouchdb-browser": "^6.1.2",
+    "@types/randomcolor": "^0.4.3",
+    "@types/react": "^16.0.38",
+    "@types/react-redux": "^5.0.15",
+    "@types/redux": "^3.6.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^22.4.2",
+    "jest-enzyme": "^6.0.0",
+    "node-sass": "^4.7.2",
+    "parcel-bundler": "^1.6.2",
+    "prettier": "^1.12.1",
+    "react-test-renderer": "^16.2.0",
+    "ts-jest": "^22.4.1",
+    "typescript": "^2.7.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

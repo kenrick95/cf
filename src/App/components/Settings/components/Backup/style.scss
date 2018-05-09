@@ -1,0 +1,13 @@
+.backup-title {
+  font-weight: 500;
+  text-decoration: underline;
+}
+.backup-action {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.backup-import,
+.backup-export {
+  width: 5rem;
+}

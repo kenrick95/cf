@@ -1,0 +1,25 @@
+.settings {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-top: 1rem;
+  padding-right: 1rem;
+  background: rgba(white, 0.9);
+}
+.settings-title {
+  font-weight: bold;
+}
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  > div + div {
+    margin-top: 0.5rem;
+  }
+  > div {
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+    border-left: 0.5rem solid rgba(black, 0.09);
+    padding-left: 0.5rem;
+  }
+}
