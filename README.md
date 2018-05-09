@@ -1,5 +1,7 @@
 # cf
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kenrick95/cf.svg)](https://greenkeeper.io/)
+
 Personal cash flow record
 
 Requirements:
