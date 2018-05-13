@@ -16,6 +16,7 @@ class Backup extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.handleExport = this.handleExport.bind(this);
+    this.handleImport = this.handleImport.bind(this);
   }
   handleExport() {
     const table = [];
@@ -47,6 +48,61 @@ class Backup extends React.Component<Props> {
     }
     csvFileCreator('export.csv', table);
   }
+  async handleImport(e: React.FormEvent<HTMLInputElement>) {
+    const file = e.currentTarget.files[0];
+    if (file) {
+      const reader = new FileReader();
+      const readerPromise: Promise<string> = new Promise(resolve => {
+        reader.onload = ev => {
+          resolve(reader.result);
+        };
+      });
+      reader.readAsText(file);
+      const text = await readerPromise;
+
+      text
+        .trim()
+        .split('\n')
+        .forEach((row, index) => {
+          // Ignore header
+          if (index === 0) {
+            return;
+          }
+
+          // Parse each row
+          const columns = JSON.parse('[' + row.trim() + ']');
+          let [
+            _id,
+            _rev,
+            number,
+            date,
+            category,
+            name,
+            location,
+            amount,
+            deleted
+          ] = columns;
+
+          // Convert to desired type
+          number = parseInt(number, 10);
+          amount = parseFloat(amount);
+          deleted = !!(deleted === 'true');
+
+          console.log(
+            'row',
+            _id,
+            _rev,
+            number,
+            date,
+            category,
+            name,
+            location,
+            amount,
+            deleted
+          );
+        });
+    }
+  }
   render() {
     return (
       <div className="backup">
@@ -56,10 +112,14 @@ class Backup extends React.Component<Props> {
             Export as csv
           </button>
 
-          {/* <label className="backup-import">
+          <label className="backup-import">
             Import
-            <input type="file" className="backup-import-input" />
-          </label> */}
+            <input
+              type="file"
+              className="backup-import-input"
+              onChange={this.handleImport}
+            />
+          </label>
         </div>
       </div>
     );
