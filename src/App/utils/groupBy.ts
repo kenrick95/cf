@@ -1,8 +1,7 @@
-
 /**
  * https://stackoverflow.com/a/38327540/917957
- * @param list 
- * @param key 
+ * @param list
+ * @param key
  */
 export function groupBy<T>(list: T[], keyGetter: (t: T) => string) {
   const map = new Map<string, T[]>();
