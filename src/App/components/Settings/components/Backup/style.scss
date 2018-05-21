@@ -9,8 +9,10 @@
 }
 .backup-import,
 .backup-export {
-  width: 5rem;
+  width: 10rem;
 }
 .backup-import-input {
-  width: 5rem;
+  width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

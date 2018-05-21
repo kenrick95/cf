@@ -3,14 +3,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { EntryDocument } from '../../../../types/entry';
 import { ReduxStore } from '../../../../redux/reducers';
+import { addEntry, updateEntry } from '../../../../redux/actions';
 
 import csvFileCreator from 'csv-file-creator';
 
 import './style.scss';
+
 interface PropsFromStore {
   entries: EntryDocument[];
 }
-interface Props extends PropsFromStore {}
+
+interface PropsFromActions {
+  addEntry: typeof addEntry;
+  updateEntry: typeof updateEntry;
+}
+interface Props extends PropsFromStore, PropsFromActions {}
 
 class Backup extends React.Component<Props> {
   constructor(props: Props) {
@@ -88,18 +95,37 @@ class Backup extends React.Component<Props> {
           amount = parseFloat(amount);
           deleted = !!(deleted === 'true');
 
-          console.log(
-            'row',
-            _id,
-            _rev,
-            number,
-            date,
-            category,
-            name,
-            location,
-            amount,
-            deleted
+          const entryIndex = this.props.entries.findIndex(
+            (entry: EntryDocument) => {
+              return entry._id === _id;
+            }
           );
+
+          // If entry exists in store, update it
+          if (entryIndex > -1) {
+            this.props.updateEntry({
+              _id,
+              _rev,
+              number,
+              date,
+              category,
+              name,
+              location,
+              amount,
+              deleted
+            });
+          } else {
+            // Else, insert it
+            this.props.addEntry({
+              number,
+              date,
+              category,
+              name,
+              location,
+              amount,
+              deleted
+            });
+          }
         });
     }
   }
@@ -133,4 +159,7 @@ function mapStateToProps(state: ReduxStore): PropsFromStore {
   };
 }
 
-export default connect<PropsFromStore>(mapStateToProps)(Backup);
+export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
+  addEntry,
+  updateEntry
+})(Backup);
