@@ -35,19 +35,34 @@ class Summary extends React.Component<Props> {
       return null;
     }
 
+    const sortedGroupedEntries = Array.from(groupedEntries.values()).map(
+      group => {
+        return {
+          value: parseFloat(
+            group
+              .reduce((value, entry) => {
+                return value + entry.amount;
+              }, 0)
+              .toFixed(2)
+          ),
+          key: group[0].location
+        };
+      }
+    );
+    sortedGroupedEntries.sort((a, b) => {
+      if (a.value < b.value) {
+        return 1;
+      } else if (a.value > b.value) {
+        return -1;
+      }
+      return 0;
+    });
+
     const data = {
-      labels: Array.from(groupedEntries.keys()),
+      labels: sortedGroupedEntries.map(entry => entry.key),
       datasets: [
         {
-          data: Array.from(groupedEntries.values()).map(group => {
-            return parseFloat(
-              group
-                .reduce((value, entry) => {
-                  return value + entry.amount;
-                }, 0)
-                .toFixed(2)
-            );
-          }),
+          data: sortedGroupedEntries.map(entry => entry.value),
           backgroundColor: randomcolor({
             luminosity: 'light',
             hue: 'bright',
