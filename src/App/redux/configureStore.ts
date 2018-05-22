@@ -4,6 +4,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './reducers';
 import PouchDB from 'pouchdb-browser';
 import { EntryDocument } from '../types/entry';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 declare global {
   interface Window {
@@ -41,6 +43,8 @@ export default function configureStore() {
     undefined,
     composeEnhancers(applyMiddleware(pouchMiddleware))
   );
+
+  const persistor = persistStore(store);
 
   return store;
 }

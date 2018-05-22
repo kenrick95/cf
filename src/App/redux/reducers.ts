@@ -3,6 +3,15 @@ import * as types from './actionTypes';
 import { EntryDocument } from '../types/entry';
 import { Filter } from '../types/filter';
 
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+  key: 'entries',
+  whitelist: ['activeFilters'],
+  storage
+}; 
+
 export type EntryReducer = {
   items: EntryDocument[];
   activeFilters: {
@@ -124,7 +133,7 @@ function entryReducer(
 }
 
 const rootReducer = combineReducers({
-  entries: entryReducer
+  entries: persistReducer(persistConfig, entryReducer)
 });
 
 export interface ReduxStore {

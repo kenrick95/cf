@@ -15,6 +15,7 @@ interface PropsFromParent {
 }
 interface PropsFromStore {
   filterEntries: string[];
+  currentFilterValue: string;
   isFilterActive: boolean;
 }
 interface Props extends PropsFromStore, PropsFromActions, PropsFromParent {}
@@ -30,6 +31,18 @@ class FilterValue extends React.Component<Props, State> {
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.handleChange = this.handleChange.bind(this);
+  }
+  componentDidUpdate(prevProps: Props) {
+    if (
+      prevProps.currentFilterValue !== this.props.currentFilterValue ||
+      prevProps.filterEntries.length !== this.props.filterEntries.length
+    ) {
+      const { filterEntries, currentFilterValue } = this.props;
+      const currentValueIndex = filterEntries.indexOf(currentFilterValue);
+      this.setState({
+        currentValueIndex
+      });
+    }
   }
   handleCheck() {
     const { filterEntries, isFilterActive } = this.props;
@@ -88,11 +101,16 @@ class FilterValue extends React.Component<Props, State> {
 function mapStateToProps(state: ReduxStore, ownProps: Props): PropsFromStore {
   const { filter } = ownProps;
   const entries = state.entries ? state.entries.items : [];
-  const isFilterActive = state.entries
-    ? !!state.entries.activeFilters[filter.name]
-    : false;
+  const currentFilterValue =
+    state.entries &&
+    state.entries.activeFilters &&
+    state.entries.activeFilters[filter.name]
+      ? state.entries.activeFilters[filter.name]
+      : null;
+  const isFilterActive = !!currentFilterValue;
   return {
     filterEntries: filter.values(entries),
+    currentFilterValue,
     isFilterActive
   };
 }
