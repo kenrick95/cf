@@ -9,7 +9,16 @@ function pad(number: number): string {
 
 export const FILTERS: Filter[] = [
   {
-    name: 'Deleted',
+    name: 'Hide deleted',
+    type: FilterType.Boolean,
+    function: entries => {
+      return entries.filter(entry => {
+        return !entry.deleted;
+      });
+    }
+  },
+  {
+    name: 'Show deleted only',
     type: FilterType.Boolean,
     function: entries => {
       return entries.filter(entry => {
