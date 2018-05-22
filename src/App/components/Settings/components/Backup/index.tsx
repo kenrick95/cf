@@ -87,13 +87,13 @@ class Backup extends React.Component<Props> {
             name,
             location,
             amount,
-            deleted
+            deleted 
           ] = columns;
 
           // Convert to desired type
           number = parseInt(number, 10);
           amount = parseFloat(amount);
-          deleted = !!(deleted === 'true');
+          deleted = !!((deleted as string).toLowerCase() === 'true');
 
           const entryIndex = this.props.entries.findIndex(
             (entry: EntryDocument) => {
