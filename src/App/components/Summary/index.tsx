@@ -40,9 +40,13 @@ class Summary extends React.Component<Props> {
       datasets: [
         {
           data: Array.from(groupedEntries.values()).map(group => {
-            return group.reduce((value, entry) => {
-              return value + entry.amount;
-            }, 0);
+            return parseFloat(
+              group
+                .reduce((value, entry) => {
+                  return value + entry.amount;
+                }, 0)
+                .toFixed(2)
+            );
           }),
           backgroundColor: randomcolor({
             luminosity: 'light',
