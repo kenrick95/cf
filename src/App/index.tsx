@@ -10,23 +10,29 @@ import Summary from './components/Summary';
 
 import 'normalize.css';
 import './style.scss';
+import { PouchDbContext } from './context';
 
 type Props = {};
 
 class App extends React.Component<Props> {
   store: Store<{}>;
+  db: typeof PouchDB;
   constructor(props: Props) {
     super(props);
-    this.store = configureStore();
+    const { store, db } = configureStore();
+    this.store = store;
+    this.db = db;
   }
   render() {
     return (
       <Provider store={this.store}>
-        <div className="app">
-          <Settings />
-          <Table />
-          <Summary />
-        </div>
+        <PouchDbContext.Provider value={this.db}>
+          <div className="app">
+            <Settings />
+            <Table />
+            <Summary />
+          </div>
+        </PouchDbContext.Provider>
       </Provider>
     );
   }

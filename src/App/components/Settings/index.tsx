@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Filter from './components/Filter';
 import Backup from './components/Backup';
+import Sync from './components/Sync';
 
 import './style.scss';
 
@@ -15,6 +16,7 @@ class Settings extends React.Component<Props> {
         <div className="settings-list">
           <Filter />
           <Backup />
+          <Sync />
         </div>
       </div>
     );

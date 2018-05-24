@@ -40,11 +40,15 @@ export default function configureStore() {
 
   const store = createStore(
     rootReducer,
-    undefined,
+    {},
     composeEnhancers(applyMiddleware(pouchMiddleware))
   );
 
   const persistor = persistStore(store);
 
-  return store;
+  return {
+    store,
+    persistor,
+    db
+  };
 }

@@ -30,3 +30,4 @@ Requirements:
 - [ ] Visualization: by category
 - [ ] Visualization: by month
 - [x] Visualization: by location
+- [x] Sync db with remote pouch db
