@@ -26,7 +26,7 @@ Requirements:
 - [x] export to file
 
 ### Nice to have
-- [ ] import from file
+- [x] import from file
 - [ ] Visualization: by category
 - [ ] Visualization: by month
 - [x] Visualization: by location
