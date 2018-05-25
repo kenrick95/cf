@@ -30,4 +30,13 @@ Requirements:
 - [ ] Visualization: by category
 - [ ] Visualization: by month
 - [x] Visualization: by location
+- [ ] Visualization: responsive width
 - [x] Sync db with remote pouch db
+- [ ] Input: press tab to select recommended autocomplete item
+- [ ] Input: cancel edit
+- [ ] Input autocomplete: sort based on number of autcomplete item appearance
+- [ ] Input autocomplete: suggesstion should come from unfiltered entries?
+- [ ] Input (date): use YYYY-MM-DD
+- [ ] Input: Press enter should focus on next entry date
+- [ ] Input autocomplete item menu: change to "absolute" instead of "fixed" (fix issue when page is scrolled)
+- [ ] Settings: Show/hide settings
