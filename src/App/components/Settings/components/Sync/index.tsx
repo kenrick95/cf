@@ -37,8 +37,7 @@ class Sync extends React.Component<Props, State> {
       this.setState({
         syncStatus: 'Syncing'
       });
-      db
-        .sync(remoteDb)
+      db.sync(remoteDb)
         .on('paused', (err: any) => {
           console.warn('Sync paused', err);
           this.setState({

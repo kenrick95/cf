@@ -54,6 +54,9 @@ function mapStateToProps(state: ReduxStore, ownProps: Props): PropsFromStore {
     isFilterActive
   };
 }
-export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
-  updateFilter
-})(FilterToggle);
+export default connect<PropsFromStore, PropsFromActions>(
+  mapStateToProps,
+  {
+    updateFilter
+  }
+)(FilterToggle);

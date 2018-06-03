@@ -87,7 +87,7 @@ class Backup extends React.Component<Props> {
             name,
             location,
             amount,
-            deleted 
+            deleted
           ] = columns;
 
           // Convert to desired type
@@ -159,7 +159,10 @@ function mapStateToProps(state: ReduxStore): PropsFromStore {
   };
 }
 
-export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
-  addEntry,
-  updateEntry
-})(Backup);
+export default connect<PropsFromStore, PropsFromActions>(
+  mapStateToProps,
+  {
+    addEntry,
+    updateEntry
+  }
+)(Backup);

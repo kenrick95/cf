@@ -242,7 +242,10 @@ function mapStateToProps(state: ReduxStore): PropsFromStore {
   };
 }
 
-export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
-  addEntry,
-  updateEntry
-})(Table);
+export default connect<PropsFromStore, PropsFromActions>(
+  mapStateToProps,
+  {
+    addEntry,
+    updateEntry
+  }
+)(Table);

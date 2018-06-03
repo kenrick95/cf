@@ -10,7 +10,7 @@ const persistConfig = {
   key: 'entries',
   whitelist: ['activeFilters'],
   storage
-}; 
+};
 
 export type EntryReducer = {
   items: EntryDocument[];

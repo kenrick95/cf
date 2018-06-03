@@ -115,6 +115,9 @@ function mapStateToProps(state: ReduxStore, ownProps: Props): PropsFromStore {
   };
 }
 
-export default connect<PropsFromStore, PropsFromActions>(mapStateToProps, {
-  updateFilter
-})(FilterValue);
+export default connect<PropsFromStore, PropsFromActions>(
+  mapStateToProps,
+  {
+    updateFilter
+  }
+)(FilterValue);
