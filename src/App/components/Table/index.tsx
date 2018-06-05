@@ -159,6 +159,9 @@ class Table extends React.Component<Props> {
       amount
     });
   }
+  handleEntryCancelEditing = () => {
+    this.resetInput();
+  };
 
   render() {
     const { entries, unfilteredEntriesLength } = this.props;
@@ -195,6 +198,8 @@ class Table extends React.Component<Props> {
         autocompleteCategories={getCategoriesFromEntries(entries)}
         autocompleteNames={getNamesFromEntries(entries)}
         autocompleteLocations={getLocationsFromEntries(entries)}
+        showCancelButton={unfilteredEntriesLength + 1 !== number}
+        handleCancelButtonClicked={this.handleEntryCancelEditing}
       />
     );
 

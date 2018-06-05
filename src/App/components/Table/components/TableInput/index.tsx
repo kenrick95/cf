@@ -18,6 +18,9 @@ interface Props extends Entry {
   autocompleteNames: string[];
   autocompleteCategories: string[];
   autocompleteLocations: string[];
+
+  showCancelButton: boolean;
+  handleCancelButtonClicked: (e: React.FormEvent<HTMLButtonElement>) => void;
 }
 
 class TableInput extends React.Component<Props> {
@@ -67,7 +70,9 @@ class TableInput extends React.Component<Props> {
       amount,
       autocompleteNames,
       autocompleteCategories,
-      autocompleteLocations
+      autocompleteLocations,
+      showCancelButton,
+      handleCancelButtonClicked
     } = this.props;
     return (
       <tr className="table-input">
@@ -148,6 +153,9 @@ class TableInput extends React.Component<Props> {
           />
         </td>
         <td className="table-input__action">
+          {showCancelButton ? (
+            <button onClick={handleCancelButtonClicked}>Cancel</button>
+          ) : null}
           <button type="submit">Submit</button>
         </td>
       </tr>
