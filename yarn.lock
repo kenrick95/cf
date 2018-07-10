@@ -149,9 +149,9 @@
     "@types/pouchdb-node" "*"
     "@types/pouchdb-replication" "*"
 
-"@types/randomcolor@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@types/randomcolor/-/randomcolor-0.4.3.tgz#66bf69fdf43ea7b73ae4c378f660442c8e236e93"
+"@types/randomcolor@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@types/randomcolor/-/randomcolor-0.5.0.tgz#8fd8e56014cf182c966cdb78f1995f47ec5b91db"
 
 "@types/react-redux@^6.0.1":
   version "6.0.1"
