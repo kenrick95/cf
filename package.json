@@ -20,8 +20,8 @@
     "csv-file-creator": "^1.0.8",
     "normalize.css": "^8.0.0",
     "pouch-redux-middleware": "^1.2.0",
-    "pouchdb": "^6.4.3",
-    "pouchdb-browser": "^6.4.3",
+    "pouchdb": "^7.0.0",
+    "pouchdb-browser": "^7.0.0",
     "randomcolor": "^0.5.3",
     "react": "^16.2.0",
     "react-autocomplete": "^1.8.1",
@@ -38,7 +38,6 @@
     "@types/randomcolor": "^0.5.0",
     "@types/react": "^16.3.16",
     "@types/react-redux": "^6.0.1",
-    "@types/redux": "^3.6.31",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "enzyme": "^3.3.0",
@@ -50,7 +49,7 @@
     "prettier": "^1.13.4",
     "react-test-renderer": "^16.2.0",
     "ts-jest": "^23.0.0",
-    "typescript": "^2.9.1"
+    "typescript": "^3.0.1"
   },
   "jest": {
     "transform": {
