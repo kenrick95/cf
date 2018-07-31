@@ -9,11 +9,7 @@ import { EntryDocument } from '../../types/entry';
 import { ReduxStore } from '../../redux/reducers';
 import { addEntry, updateEntry } from '../../redux/actions';
 import { formatDate, ISO_8601_DATE_FORMAT } from '../../utils/date';
-import {
-  getNamesFromEntries,
-  getCategoriesFromEntries,
-  getLocationsFromEntries
-} from './components/TableInput/util';
+
 import { getEntries } from '../../redux/selector';
 
 import './style.scss';
@@ -195,9 +191,6 @@ class Table extends React.Component<Props> {
         location={location}
         amount={amount}
         deleted={false}
-        autocompleteCategories={getCategoriesFromEntries(entries)}
-        autocompleteNames={getNamesFromEntries(entries)}
-        autocompleteLocations={getLocationsFromEntries(entries)}
         showCancelButton={unfilteredEntriesLength + 1 !== number}
         handleCancelButtonClicked={this.handleEntryCancelEditing}
       />

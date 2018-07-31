@@ -1,23 +1,32 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
+// import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
 import { Entry, EntryDocument } from '../../../../types/entry';
 import Autocomplete from 'react-autocomplete';
 
 import AutocompleteItem from './components/AutocompleteItem';
 import { matchItemToTerm, identityFn } from './util';
+import {
+  getNamesFromEntries,
+  getCategoriesFromEntries,
+  getLocationsFromEntries
+} from './util';
 
 import './style.scss';
+import { ReduxStore } from '../../../../redux/reducers';
 
-interface Props extends Entry {
+interface PropsFromStore {
+  autocompleteNames: string[];
+  autocompleteCategories: string[];
+  autocompleteLocations: string[];
+}
+
+interface Props extends Entry, PropsFromStore {
   handleDateChanged: (e: React.FormEvent<HTMLInputElement>) => void;
   handleCategoryChanged: (newValue: string) => void;
   handleNameChanged: (newValue: string) => void;
   handleLocationChanged: (newValue: string) => void;
   handleAmountChanged: (e: React.FormEvent<HTMLInputElement>) => void;
-  autocompleteNames: string[];
-  autocompleteCategories: string[];
-  autocompleteLocations: string[];
 
   showCancelButton: boolean;
   handleCancelButtonClicked: (e: React.FormEvent<HTMLButtonElement>) => void;
@@ -163,4 +172,16 @@ class TableInput extends React.Component<Props> {
   }
 }
 
-export default TableInput;
+
+
+function mapStateToProps(state: ReduxStore): PropsFromStore {
+  return {
+    autocompleteCategories: getCategoriesFromEntries(state.entries.items),
+    autocompleteNames: getNamesFromEntries(state.entries.items),
+    autocompleteLocations: getLocationsFromEntries(state.entries.items)
+  }
+}
+
+export default connect<PropsFromStore>(
+  mapStateToProps
+)(TableInput);

@@ -35,7 +35,7 @@ Requirements:
 - [ ] Input: press tab to select recommended autocomplete item
 - [x] Input: cancel edit
 - [x] Input autocomplete: sort based on number of autcomplete item appearance
-- [ ] Input autocomplete: suggesstion should come from unfiltered entries?
+- [x] Input autocomplete: suggesstion should come from unfiltered entries?
 - [ ] Input (date): use YYYY-MM-DD
 - [ ] Input: Press enter should focus on next entry date
 - [ ] Input autocomplete item menu: change to "absolute" instead of "fixed" (fix issue when page is scrolled)
