@@ -2,10 +2,27 @@ import { EntryDocument } from '../../../../types/entry';
 
 function getFieldSet(entries: EntryDocument[], fieldName: keyof EntryDocument) {
   const set = new Set();
+  const count = new Map();
   for (const entry of entries) {
     set.add(entry[fieldName]);
+    if (count.has(entry[fieldName])) {
+      count.set(entry[fieldName], count.get(entry[fieldName]) + 1)
+    } else {
+      count.set(entry[fieldName], 1)
+    }
   }
-  return Array.from(set);
+  const arraySet = Array.from(set);
+  arraySet.sort((entryA: EntryDocument, entryB: EntryDocument) => {
+    if (count.get(entryA) < count.get(entryB)) {
+      return 1;
+    } else if (count.get(entryA) === count.get(entryB)) {
+      return 0;
+    } else {
+      return -1;
+    }
+  })
+
+  return arraySet;
 }
 export function getNamesFromEntries(entries: EntryDocument[]) {
   return getFieldSet(entries, 'name');
