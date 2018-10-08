@@ -44,7 +44,7 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
     "jest": "^23.6.0",
-    "jest-enzyme": "^6.1.2",
+    "jest-enzyme": "^7.0.0",
     "node-sass": "^4.9.3",
     "parcel-bundler": "^1.10.1",
     "prettier": "^1.14.3",
