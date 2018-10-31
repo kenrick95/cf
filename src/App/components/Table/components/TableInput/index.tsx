@@ -172,16 +172,12 @@ class TableInput extends React.Component<Props> {
   }
 }
 
-
-
 function mapStateToProps(state: ReduxStore): PropsFromStore {
   return {
     autocompleteCategories: getCategoriesFromEntries(state.entries.items),
     autocompleteNames: getNamesFromEntries(state.entries.items),
     autocompleteLocations: getLocationsFromEntries(state.entries.items)
-  }
+  };
 }
 
-export default connect<PropsFromStore>(
-  mapStateToProps
-)(TableInput);
+export default connect<PropsFromStore>(mapStateToProps)(TableInput);

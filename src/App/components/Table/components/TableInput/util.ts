@@ -6,9 +6,9 @@ function getFieldSet(entries: EntryDocument[], fieldName: keyof EntryDocument) {
   for (const entry of entries) {
     set.add(entry[fieldName]);
     if (count.has(entry[fieldName])) {
-      count.set(entry[fieldName], count.get(entry[fieldName]) + 1)
+      count.set(entry[fieldName], count.get(entry[fieldName]) + 1);
     } else {
-      count.set(entry[fieldName], 1)
+      count.set(entry[fieldName], 1);
     }
   }
   const arraySet = Array.from(set);
@@ -20,7 +20,7 @@ function getFieldSet(entries: EntryDocument[], fieldName: keyof EntryDocument) {
     } else {
       return -1;
     }
-  })
+  });
 
   return arraySet;
 }
