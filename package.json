@@ -26,7 +26,7 @@
     "react": "^16.6.3",
     "react-autocomplete": "^1.8.1",
     "react-chartjs-2": "^2.7.4",
-    "react-dom": "^16.6.0",
+    "react-dom": "^16.6.3",
     "react-redux": "^5.1.0",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0"
