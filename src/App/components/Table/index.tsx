@@ -173,8 +173,8 @@ class Table extends React.Component<Props> {
       unfilteredEntriesLength === editingEntryIndex
         ? unfilteredEntriesLength + 1
         : entries[editingEntryIndex]
-          ? entries[editingEntryIndex].number
-          : unfilteredEntriesLength + 1;
+        ? entries[editingEntryIndex].number
+        : unfilteredEntriesLength + 1;
 
     const inputComponent = (
       <TableInput
