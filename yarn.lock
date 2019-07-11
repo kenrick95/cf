@@ -1206,10 +1206,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@^16.8.22":
-  version "16.8.22"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.22.tgz#7f18bf5ea0c1cad73c46b6b1c804a3ce0eec6d54"
-  integrity sha512-C3O1yVqk4sUXqWyx0wlys76eQfhrQhiDhDlHBrjER76lR2S2Agiid/KpOU9oCqj1dISStscz7xXz1Cg8+sCQeA==
+"@types/react@^16.8.23":
+  version "16.8.23"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.23.tgz#ec6be3ceed6353a20948169b6cb4c97b65b97ad2"
+  integrity sha512-abkEOIeljniUN9qB5onp++g0EY38h7atnDHxwKUFz1r3VH1+yG1OKi2sNPTyObL40goBmfKFpdii2lEzwLX1cA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -5366,10 +5366,10 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
-lodash-es@^4.2.1:
-  version "4.17.11"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
-  integrity sha512-DHb1ub+rMjjrxqlB3H56/6MXtm1lSksDp2rA2cNWjG8mlDUYFhUj3Di2Zn5IwSU87xLv8tNIQ7sSwE/YOX/D/Q==
+lodash-es@^4.17.14, lodash-es@^4.2.1:
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.14.tgz#12a95a963cc5955683cee3b74e85458954f37ecc"
+  integrity sha512-7zchRrGa8UZXjD/4ivUWP1867jDkhzTG2c/uj739utSd7O/pFFdxspCemIFKEEjErbcqRzn8nKnGsi7mvTgRPA==
 
 lodash._baseisequal@^3.0.0:
   version "3.0.7"
@@ -7310,10 +7310,18 @@ redux@^3.6.0:
     loose-envify "^1.1.0"
     symbol-observable "^1.0.3"
 
-redux@^4.0.0, redux@^4.0.1:
+redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
   integrity sha512-R7bAtSkk7nY6O/OYMVR9RiBI+XghjF9rlbl5806HJbQph0LJVHZrU5oaO4q70eUKiqMRqm4y07KLTlMZ2BlVmg==
+  dependencies:
+    loose-envify "^1.4.0"
+    symbol-observable "^1.2.0"
+
+redux@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
+  integrity sha512-vKv4WdiJxOWKxK0yRoaK3Y4pxxB0ilzVx6dszU2W8wLxlb2yikRph4iV/ymtdJ6ZxpBLFbyrxklnT5yBbQSl3Q==
   dependencies:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
@@ -8415,10 +8423,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.2.tgz#a09e1dc69bc9551cadf17dba10ee42cf55e5d56c"
-  integrity sha512-7KxJovlYhTX5RaRbUdkAXN1KUZ8PwWlTzQdHV6xNqvuFOs7+WBo10TQUqT19Q/Jz2hk5v9TQDIhyLhhJY4p5AA==
+typescript@^3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
+  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 uglify-js@^3.1.4:
   version "3.6.0"
