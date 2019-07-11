@@ -53,6 +53,7 @@
     "typescript": "^3.5.3"
   },
   "resolutions": {
+    "lodash": "^4.17.14",
     "lodash-es": "^4.17.14"
   },
   "jest": {
