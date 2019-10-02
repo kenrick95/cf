@@ -53,8 +53,7 @@
     "typescript": "^3.6.3"
   },
   "resolutions": {
-    "lodash": "^4.17.14",
-    "lodash-es": "^4.17.14"
+    "serialize-to-js": "^3.0.0"
   },
   "jest": {
     "verbose": true,
