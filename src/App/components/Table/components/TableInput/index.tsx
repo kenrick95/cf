@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 // import { formatDate, ISO_8601_DATE_FORMAT } from '../../../../utils/date';
 import { Entry, EntryDocument } from '../../../../types/entry';
-import Autocomplete from 'react-autocomplete';
+import Autosuggest from 'react-autosuggest';
 
 import AutocompleteItem from './components/AutocompleteItem';
 import { matchItemToTerm, identityFn } from './util';
@@ -16,9 +16,9 @@ import './style.scss';
 import { ReduxStore } from '../../../../redux/reducers';
 
 interface PropsFromStore {
-  autocompleteNames: string[];
-  autocompleteCategories: string[];
-  autocompleteLocations: string[];
+  names: string[];
+  categories: string[];
+  locations: string[];
 }
 
 interface Props extends Entry, PropsFromStore {
@@ -32,33 +32,80 @@ interface Props extends Entry, PropsFromStore {
   handleCancelButtonClicked: (e: React.FormEvent<HTMLButtonElement>) => void;
 }
 
-class TableInput extends React.Component<Props> {
+interface State {
+  suggestedNames: string[];
+  suggestedCategories: string[];
+  suggestedLocations: string[];
+}
+
+class TableInput extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = {
+      suggestedNames: props.names || [],
+      suggestedCategories: props.categories || [],
+      suggestedLocations: props.locations || []
+    };
   }
+
+  handleSuggestedNamesFetchRequested = ({ value }) => {
+    const { names } = this.props;
+    this.setState({
+      suggestedNames: names.filter(name => {
+        return matchItemToTerm(name, value);
+      })
+    });
+  };
+  handleSuggestedCategoriesFetchRequested = () => {
+    this.setState({
+      suggestedCategories: []
+    });
+  };
+  handleSuggestedLocationsFetchRequested = () => {
+    this.setState({
+      suggestedLocations: []
+    });
+  };
+
+  handleSuggestedNamesClearRequested = () => {
+    this.setState({
+      suggestedNames: []
+    });
+  };
+  handleSuggestedCategoriesClearRequested = () => {
+    this.setState({
+      suggestedCategories: []
+    });
+  };
+  handleSuggestedLocationsClearRequested = () => {
+    this.setState({
+      suggestedLocations: []
+    });
+  };
 
   handleCategoryInputChanged = (
     e: React.FormEvent<HTMLInputElement>,
-    newValue: string
+    { newValue }: { newValue: string }
   ) => {
     const { handleCategoryChanged } = this.props;
     handleCategoryChanged(newValue);
   };
   handleNameInputChanged = (
     e: React.FormEvent<HTMLInputElement>,
-    newValue: string
+    { newValue }: { newValue: string }
   ) => {
     const { handleNameChanged } = this.props;
     handleNameChanged(newValue);
   };
   handleLocationInputChanged = (
     e: React.FormEvent<HTMLInputElement>,
-    newValue: string
+    { newValue }: { newValue: string }
   ) => {
     const { handleLocationChanged } = this.props;
     handleLocationChanged(newValue);
   };
   renderAutocompleteItem = (item: string, isHighlighted: boolean) => {
+    console.log('renderAutocompleteItem', item, isHighlighted)
     return (
       <AutocompleteItem item={item} isHighlighted={isHighlighted} key={item} />
     );
@@ -77,12 +124,15 @@ class TableInput extends React.Component<Props> {
       name,
       location,
       amount,
-      autocompleteNames,
-      autocompleteCategories,
-      autocompleteLocations,
       showCancelButton,
       handleCancelButtonClicked
     } = this.props;
+    const {
+      suggestedCategories,
+      suggestedNames,
+      suggestedLocations
+    } = this.state;
+    console.log('suggestedNames', suggestedNames)
     return (
       <tr className="table-input">
         <td className="table-input__id">
@@ -103,51 +153,69 @@ class TableInput extends React.Component<Props> {
           />
         </td>
         <td className="table-input__category">
-          <Autocomplete
-            value={category}
+          <Autosuggest
             inputProps={{
               className: 'table-input__category-input',
               type: 'text',
-              required: true
+              required: true,
+              value: category,
+              onChange: this.handleCategoryInputChanged
             }}
-            onChange={this.handleCategoryInputChanged}
-            onSelect={handleCategoryChanged}
-            items={autocompleteCategories}
-            getItemValue={identityFn}
-            shouldItemRender={matchItemToTerm}
-            renderItem={this.renderAutocompleteItem}
+            onSuggestionSelected={handleCategoryChanged}
+            onSuggestionsClearRequested={
+              this.handleSuggestedCategoriesClearRequested
+            }
+            onSuggestionsFetchRequested={
+              this.handleSuggestedCategoriesFetchRequested
+            }
+            suggestions={suggestedCategories}
+            getSuggestionValue={identityFn}
+            renderSuggestion={this.renderAutocompleteItem}
+            highlightFirstSuggestion={true}
           />
         </td>
         <td className="table-input__name">
-          <Autocomplete
-            value={name}
+          <Autosuggest
             inputProps={{
               className: 'table-input__name-input',
               type: 'text',
-              required: true
+              required: true,
+              value: name,
+              onChange: this.handleNameInputChanged
             }}
-            onChange={this.handleNameInputChanged}
-            onSelect={handleNameChanged}
-            items={autocompleteNames}
-            getItemValue={identityFn}
-            shouldItemRender={matchItemToTerm}
-            renderItem={this.renderAutocompleteItem}
+            onSuggestionSelected={handleNameChanged}
+            onSuggestionsClearRequested={
+              this.handleSuggestedNamesClearRequested
+            }
+            onSuggestionsFetchRequested={
+              this.handleSuggestedNamesFetchRequested
+            }
+            suggestions={suggestedNames}
+            getSuggestionValue={identityFn}
+            renderSuggestion={this.renderAutocompleteItem}
+            highlightFirstSuggestion={true}
           />
         </td>
         <td className="table-input__location">
-          <Autocomplete
-            value={location}
+          <Autosuggest
             inputProps={{
               className: 'table-input__location-input',
               type: 'text',
-              required: true
+              required: true,
+              value: location,
+              onChange: this.handleLocationInputChanged
             }}
-            onChange={this.handleLocationInputChanged}
-            onSelect={handleLocationChanged}
-            items={autocompleteLocations}
-            getItemValue={identityFn}
-            shouldItemRender={matchItemToTerm}
-            renderItem={this.renderAutocompleteItem}
+            onSuggestionSelected={handleLocationChanged}
+            onSuggestionsClearRequested={
+              this.handleSuggestedLocationsClearRequested
+            }
+            onSuggestionsFetchRequested={
+              this.handleSuggestedLocationsFetchRequested
+            }
+            suggestions={suggestedLocations}
+            getSuggestionValue={identityFn}
+            renderSuggestion={this.renderAutocompleteItem}
+            highlightFirstSuggestion={true}
           />
         </td>
         <td className="table-input__amount">
@@ -174,9 +242,9 @@ class TableInput extends React.Component<Props> {
 
 function mapStateToProps(state: ReduxStore): PropsFromStore {
   return {
-    autocompleteCategories: getCategoriesFromEntries(state.entries.items),
-    autocompleteNames: getNamesFromEntries(state.entries.items),
-    autocompleteLocations: getLocationsFromEntries(state.entries.items)
+    categories: getCategoriesFromEntries(state.entries.items),
+    names: getNamesFromEntries(state.entries.items),
+    locations: getLocationsFromEntries(state.entries.items)
   };
 }
 

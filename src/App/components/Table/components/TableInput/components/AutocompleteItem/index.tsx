@@ -6,7 +6,8 @@ interface Props {
   item: string;
   isHighlighted: boolean;
 
-  // NOTE: These two are hacks found by reading react-autocomplete source code,
+  // TODO: Update these two!
+  // These two are hacks found by reading react-autocomplete source code,
   //       to pass through the event handlers to real DOM element
   onMouseEnter?: (e: React.MouseEvent<HTMLDivElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
