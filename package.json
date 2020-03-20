@@ -22,10 +22,10 @@
     "pouch-redux-middleware": "^1.2.0",
     "pouchdb-browser": "^7.2.1",
     "randomcolor": "^0.5.4",
-    "react": "^16.13.0",
+    "react": "^16.13.1",
     "react-autocomplete": "^1.8.1",
     "react-chartjs-2": "^2.9.0",
-    "react-dom": "^16.13.0",
+    "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0"
@@ -47,7 +47,7 @@
     "node-sass": "^4.13.1",
     "parcel-bundler": "^1.12.4",
     "prettier": "^1.19.1",
-    "react-test-renderer": "^16.13.0",
+    "react-test-renderer": "^16.13.1",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
   },
